@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Home icon states -->
+    <item android:drawable="@drawable/home_icon_clicked" android:state_checked="true" android:state_selected="true"/>
+    <item android:drawable="@drawable/home_icon_unclicked" android:state_checked="false" android:state_selected="false"/>
+
+    <!-- Saved Recipes icon states -->
+    <item android:drawable="@drawable/bookmark_icon_clicked" android:state_checked="true" android:state_selected="true"/>
+    <item android:drawable="@drawable/bookmark_icon_unclicked" android:state_checked="false" android:state_selected="false"/>
+
+    <!-- Add Recipe icon states -->
+    <item android:drawable="@drawable/add_recipe_icon_clicked" android:state_checked="true" android:state_selected="true"/>
+    <item android:drawable="@drawable/add_recipe_icon_unclicked" android:state_checked="false" android:state_selected="false"/>
+
+    <!-- Profile icon states -->
+    <item android:drawable="@drawable/profile_icon_clicked" android:state_checked="true" android:state_selected="true"/>
+    <item android:drawable="@drawable/profile_icon_unclicked" android:state_checked="false" android:state_selected="false"/>
+</selector>
