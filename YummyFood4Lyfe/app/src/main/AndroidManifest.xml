@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.YummyFood4Lyfe"
         tools:targetApi="31">
+
         <activity android:name=".LoaderActivity"
             android:exported="true">
             <intent-filter>
@@ -20,6 +21,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".SplashScreenActivity" />
+        <activity android:name=".SignUpActivity" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".HomePageActivity" />
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

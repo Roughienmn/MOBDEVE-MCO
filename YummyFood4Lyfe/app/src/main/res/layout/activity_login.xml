@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
@@ -94,7 +94,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView19" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/signInButton"
         android:layout_width="350dp"
         android:layout_height="80dp"
         android:layout_marginTop="64dp"
@@ -112,25 +112,25 @@
         android:id="@+id/textView21"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins"
-        android:text="Already a member?"
-        android:layout_marginStart="69dp"
+        android:layout_marginStart="77dp"
         android:layout_marginTop="50dp"
-        app:layout_constraintStart_toStartOf="@+id/button4"
-        app:layout_constraintTop_toBottomOf="@+id/button4" />
+        android:fontFamily="@font/poppins"
+        android:text="No account yet?"
+        app:layout_constraintStart_toStartOf="@+id/signInButton"
+        app:layout_constraintTop_toBottomOf="@+id/signInButton" />
 
     <TextView
-        android:id="@+id/textView22"
+        android:id="@+id/signUpLoginScreen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="98dp"
         android:clickable="true"
         android:focusable="true"
         android:fontFamily="@font/poppins"
-        android:layout_marginEnd="92dp"
-        android:text="Log In."
-        android:layout_marginTop="50dp"
+        android:text="Sign Up."
         android:textColor="@color/green"
-        app:layout_constraintEnd_toEndOf="@+id/button4"
-        app:layout_constraintTop_toBottomOf="@+id/button4" />
+        app:layout_constraintEnd_toEndOf="@+id/signInButton"
+        app:layout_constraintTop_toBottomOf="@+id/signInButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
