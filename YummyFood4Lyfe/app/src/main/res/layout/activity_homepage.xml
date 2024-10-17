@@ -211,7 +211,7 @@
     </HorizontalScrollView>
 
     <TextView
-        android:id="@+id/popular_text"
+        android:id="@+id/recommended_text"
         android:layout_width="270dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -235,13 +235,13 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcview_popular"
+        android:id="@+id/rcview_recommended"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/popular_text"
+        app:layout_constraintTop_toBottomOf="@+id/recommended_text"
         tools:ignore="RtlSymmetry" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

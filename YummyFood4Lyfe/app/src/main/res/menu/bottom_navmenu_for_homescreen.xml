@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/home"
         android:icon="@drawable/home_icon_clicked"
-        android:title="Home"/>
+        android:title="Home"
+        app:labelVisibilityMode="labeled"/>
     <item
         android:id="@+id/saved_recipes"
         android:icon="@drawable/bookmark_icon_unclicked"
-        android:title="Saved Recipes"/>
+        android:title="Saved Recipes"
+        app:labelVisibilityMode="labeled"/>
     <item
         android:id="@+id/add_recipe"
         android:icon="@drawable/add_recipe_icon_unclicked"
-        android:title="Add Recipe"/>
+        android:title="Add Recipe"
+        app:labelVisibilityMode="labeled"/>
     <item
         android:id="@+id/profile"
         android:icon="@drawable/profile_icon_unclicked"
-        android:title="Profile"/>
+        android:title="Profile"
+        app:labelVisibilityMode="labeled"/>
 </menu>
