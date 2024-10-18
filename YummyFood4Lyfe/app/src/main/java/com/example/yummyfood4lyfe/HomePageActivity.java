@@ -19,7 +19,7 @@ public class HomePageActivity extends Activity {
         RecyclerView recyclerView = findViewById(R.id.rcview_recommended);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        List<String> dataList = Arrays.asList("Classic Chicken Adobo", "Another Recipe", "More Recipes");
+        List<String> dataList = Arrays.asList("Classic Chicken Adobo", "Another Recipe", "More Recipes"); //TODO ADD MORE
         RecommendedListAdapter adapter = new RecommendedListAdapter(this, dataList);
         recyclerView.setAdapter(adapter);
 

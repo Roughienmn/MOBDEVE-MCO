@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/chicken_adobo_sample" />
 
-    <ImageView
+   <!-- <ImageView
         android:id="@+id/image_gradient"
         android:layout_width="match_parent"
         android:layout_height="100dp"
@@ -26,7 +26,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/recipe_img"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/image_btn_overlay" />
+        app:srcCompat="@drawable/image_btn_overlay" /> -->
 
 
     <RelativeLayout
