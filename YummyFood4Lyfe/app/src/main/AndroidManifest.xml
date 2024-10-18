@@ -24,6 +24,7 @@
         <activity android:name=".SignUpActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".HomePageActivity" />
+        <activity android:name=".RecipeActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

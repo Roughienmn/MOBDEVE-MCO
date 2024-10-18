@@ -1,7 +1,10 @@
 package com.example.yummyfood4lyfe;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.EditText;
+import android.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.Arrays;
@@ -17,7 +20,13 @@ public class HomePageActivity extends Activity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         List<String> dataList = Arrays.asList("Classic Chicken Adobo", "Another Recipe", "More Recipes");
-        RecommendedListAdapter adapter = new RecommendedListAdapter(dataList);
+        RecommendedListAdapter adapter = new RecommendedListAdapter(this, dataList);
         recyclerView.setAdapter(adapter);
+
+        EditText searchBar = findViewById(R.id.searchBar);
+        searchBar.setOnClickListener(v -> {
+            Intent intent = new Intent(HomePageActivity.this, SearchActivity.class);
+            startActivity(intent);
+        });
     }
 }

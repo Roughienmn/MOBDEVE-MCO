@@ -24,7 +24,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             }
         });
 
-        TextView loginText = findViewById(R.id.loginText);
+        TextView loginText = findViewById(R.id.categories);
         loginText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -1,5 +1,7 @@
 package com.example.yummyfood4lyfe;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +13,10 @@ import java.util.List;
 public class RecommendedListAdapter extends RecyclerView.Adapter<RecommendedListAdapter.ViewHolder> {
 
     private List<String> dataList;
+    private Context context;
 
-    public RecommendedListAdapter(List<String> dataList) {
+    public RecommendedListAdapter(Context context, List<String> dataList) {
+        this.context = context;
         this.dataList = dataList;
     }
 
@@ -27,6 +31,10 @@ public class RecommendedListAdapter extends RecyclerView.Adapter<RecommendedList
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String data = dataList.get(position);
         holder.textView.setText(data);
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, RecipeActivity.class);
+            context.startActivity(intent);
+        });
     }
 
     @Override

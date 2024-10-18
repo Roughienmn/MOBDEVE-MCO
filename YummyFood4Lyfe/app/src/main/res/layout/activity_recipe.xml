@@ -115,34 +115,35 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
-            android:id="@+id/ing_btn"
-            android:layout_width="150dp"
-            android:layout_height="42dp"
+            android:id="@+id/ingredient_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ingredients"
             android:layout_below="@+id/title"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="34dp"
-            android:layout_marginLeft="24dp"
             android:layout_marginTop="70dp"
-            android:background="@drawable/ingredients_button"
+            android:layout_marginStart="34dp"
+            android:background="@android:color/transparent"
             android:fontFamily="@font/poppins_medium"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:text="Ingredients"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/steps_btn"
-            android:layout_width="150dp"
-            android:layout_height="42dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Steps"
             android:layout_below="@+id/title"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="70dp"
             android:layout_marginEnd="34dp"
-            android:background="@drawable/ingredients_button"
+            android:background="@android:color/transparent"
             android:fontFamily="@font/poppins_medium"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:text="Steps"
             android:textAllCaps="false"
             android:textColor="@color/black"
             android:textStyle="bold" />
@@ -151,7 +152,7 @@
             android:id="@+id/ingredients_scroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/ing_btn"
+            android:layout_below="@+id/ingredient_btn"
             android:layout_alignParentStart="true"
             android:layout_marginStart="-5dp"
             android:layout_marginTop="1dp"
@@ -160,14 +161,20 @@
             android:paddingRight="20dp">
 
             <TextView
-                android:id="@+id/ingredients"
+                android:id="@+id/ingredients_txt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:lineSpacingExtra="10dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="20dp"
-                android:text=""
+                android:text="2 lbs chicken\n3 pieces dried bay leaves\n4 tablespoons soy sauce\n6 tablespoons white vinegar
+                \n5 cloves garlic
+                \n1/2 cup of water
+                \n3 tablespoons cooking oil
+                \n1 teaspoon sugar
+                \n1/4 teaspoon salt
+                \n1 teaspoon whole peppercorn"
                 android:textColor="#000000"
                 android:textSize="15sp"
                 app:emojiCompatEnabled="true" />
@@ -178,7 +185,7 @@
             android:id="@+id/steps"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/ing_btn"
+            android:layout_below="@+id/ingredient_btn"
             android:layout_alignParentStart="true"
             android:layout_marginTop="3dp"
             android:paddingLeft="20dp"
@@ -193,7 +200,13 @@
                 android:layout_gravity="center_horizontal"
                 android:paddingTop="12dp"
                 android:paddingBottom="50dp"
-                android:text="Test text is here"
+                android:text="Combine chicken, soy sauce, and garlic in a large bowl. Mix well. Marinate the chicken for at least 1 hour.
+                            \nHeat a cooking pot. Pour cooking oil.
+                            \nWhen the oil is hot enough, pan-fry the marinated chicken for 2 minutes per side.
+                            \nPour-in the remaining marinade, including garlic. Add water. Bring to a boil
+                            \nAdd dried bay leaves and whole peppercorn. Simmer for 30 minutes or until the chicken gets tender
+                            \nAdd vinegar. Stir and cook for 10 minutes.
+                            \nPut-in the sugar, and salt. Stir and turn the heat off.Serve hot. Share and Enjoy!"
                 android:textColor="#000000"
                 android:textSize="15sp"
                 app:emojiCompatEnabled="true"
@@ -205,7 +218,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="22dp"
-            android:layout_below="@+id/ing_btn"
+            android:layout_below="@+id/ingredient_btn"
             android:layout_alignParentStart="true"
             android:layout_marginTop="5dp"
             android:src="@drawable/text_overlay" />
@@ -228,7 +241,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/zoom_image"
+        android:id="@+id/bookmark_image"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_marginTop="20dp"

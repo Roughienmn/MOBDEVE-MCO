@@ -41,7 +41,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/searchBar"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:focusable="false"
@@ -63,7 +63,7 @@
 
 
     <TextView
-        android:id="@+id/loginText"
+        android:id="@+id/categories"
         android:layout_width="270dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
@@ -72,7 +72,7 @@
         android:textColor="@color/black"
         android:textSize="19sp"
         app:layout_constraintStart_toStartOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/searchBar" />
 
 
     <HorizontalScrollView
@@ -81,7 +81,7 @@
         android:layout_height="wrap_content"
         android:scrollbars="none"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginText">
+        app:layout_constraintTop_toBottomOf="@+id/categories">
 
 
         <RelativeLayout
