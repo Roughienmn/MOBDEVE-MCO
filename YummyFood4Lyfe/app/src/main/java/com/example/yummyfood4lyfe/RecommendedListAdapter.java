@@ -2,9 +2,12 @@ package com.example.yummyfood4lyfe;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,6 +38,10 @@ public class RecommendedListAdapter extends RecyclerView.Adapter<RecommendedList
             Intent intent = new Intent(context, RecipeActivity.class);
             context.startActivity(intent);
         });
+        holder.commentButton.setOnClickListener(v -> {
+            Intent intent = new Intent(context, CommentActivity.class);
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -44,10 +51,13 @@ public class RecommendedListAdapter extends RecyclerView.Adapter<RecommendedList
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView textView;
+        ImageButton commentButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            commentButton = itemView.findViewById(R.id.commentButton);
             textView = itemView.findViewById(R.id.textView20); // Adjust this ID based on your layout
+
         }
     }
 }

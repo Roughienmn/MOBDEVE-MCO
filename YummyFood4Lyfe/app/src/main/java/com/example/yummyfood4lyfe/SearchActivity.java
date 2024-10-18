@@ -24,6 +24,7 @@ import android.widget.ImageView;
 //import com.example.yummyfood4lyfe.RoomDB.UserDao;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -44,12 +45,17 @@ public class SearchActivity extends AppCompatActivity {
 
         // Find views
         search = findViewById(R.id.search);
-        back_btn = findViewById(R.id.back_to_home);
         rcview = findViewById(R.id.rcview);
 
         // Show and focus the keyboard
         search.requestFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        rcview.setLayoutManager(new LinearLayoutManager(this));
+
+        List<String> dataList = Arrays.asList("Classic Chicken Adobo", "Another Recipe", "More Recipes"); //TODO ADD MORE
+        RecommendedListAdapter adapter = new RecommendedListAdapter(this, dataList);
+        rcview.setAdapter(adapter);
 
      // Get database
 
@@ -107,14 +113,9 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
           */
-        // Exit activity
-        back_btn.setOnClickListener(v -> {
-            imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
-            finish();
-        });
     }
 
-    private void filter(String string) {
+    /*private void filter(String string) {
     }
 
     /* THIS IS FOR THE BACKEND, I JUST ADDED HERE

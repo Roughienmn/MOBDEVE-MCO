@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.SearchView;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.Arrays;
 import java.util.List;
 
-public class HomePageActivity extends Activity {
+public class HomePageActivity extends AppCompatActivity {
+    EditText searchBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,9 +26,9 @@ public class HomePageActivity extends Activity {
         RecommendedListAdapter adapter = new RecommendedListAdapter(this, dataList);
         recyclerView.setAdapter(adapter);
 
-        EditText searchBar = findViewById(R.id.searchBar);
+        searchBar = findViewById(R.id.searchBar);
         searchBar.setOnClickListener(v -> {
-            Intent intent = new Intent(HomePageActivity.this, SearchActivity.class);
+            Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
             startActivity(intent);
         });
     }

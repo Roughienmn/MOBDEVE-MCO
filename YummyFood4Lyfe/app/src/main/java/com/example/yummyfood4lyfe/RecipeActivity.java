@@ -6,14 +6,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-public class RecipeActivity extends Activity {
+public class RecipeActivity extends AppCompatActivity {
     private ScrollView ingredientsScroll;
     private ScrollView stepsScroll;
     private Button ingredientsButton;
     private Button stepsButton;
-    private ImageView backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +25,6 @@ public class RecipeActivity extends Activity {
         stepsScroll = findViewById(R.id.steps);
         ingredientsButton = findViewById(R.id.ingredient_btn);
         stepsButton = findViewById(R.id.steps_btn);
-        backButton = findViewById(R.id.back_btn);
 
         ingredientsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,13 +47,6 @@ public class RecipeActivity extends Activity {
                 stepsButton.setTextColor(ContextCompat.getColor(RecipeActivity.this, android.R.color.white));
                 ingredientsButton.setBackgroundResource(android.R.color.transparent);
                 ingredientsButton.setTextColor(ContextCompat.getColor(RecipeActivity.this, android.R.color.black));
-            }
-        });
-
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
             }
         });
     }
