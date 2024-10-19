@@ -1,7 +1,12 @@
 package com.example.yummyfood4lyfe;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -74,21 +79,37 @@ public class ProfileActivity extends AppCompatActivity {
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.home) {
-                startActivity(new Intent(ProfileActivity.this, HomePageActivity.class));
+                //startActivity(new Intent(ProfileActivity.this, HomePageActivity.class));
+                Intent intent = new Intent(ProfileActivity.this, HomePageActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
                 overridePendingTransition(0, 0);
                 return true;
             } else if (itemId == R.id.profile) {
                 return true;
             } else if (itemId == R.id.saved_recipes) {
-                startActivity(new Intent(ProfileActivity.this, SavedRecipeActivity.class));
+                //startActivity(new Intent(ProfileActivity.this, SavedRecipeActivity.class));
+                Intent intent = new Intent(ProfileActivity.this, SavedRecipeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
                 overridePendingTransition(0, 0);
                 return true;
             } else if (itemId == R.id.add_recipe) {
-                startActivity(new Intent(ProfileActivity.this, AddRecipeActivity.class));
+                //startActivity(new Intent(ProfileActivity.this, AddRecipeActivity.class));
+                Intent intent = new Intent(ProfileActivity.this, AddRecipeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
                 overridePendingTransition(0, 0);
                 return true;
             }
             return false;
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.profile);
     }
 }
