@@ -67,8 +67,8 @@
 
                         <ImageButton
                             android:id="@+id/imageButton"
-                            android:layout_width="69dp"
-                            android:layout_height="50dp"
+                            android:layout_width="48dp"
+                            android:layout_height="34dp"
                             android:backgroundTint="@android:color/transparent"
                             android:contentDescription="cameraButton"
                             android:padding="0dp"
