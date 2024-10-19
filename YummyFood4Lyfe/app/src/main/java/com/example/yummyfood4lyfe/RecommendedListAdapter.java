@@ -2,11 +2,9 @@ package com.example.yummyfood4lyfe;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -56,8 +54,7 @@ public class RecommendedListAdapter extends RecyclerView.Adapter<RecommendedList
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             commentButton = itemView.findViewById(R.id.commentButton);
-            textView = itemView.findViewById(R.id.textView20); // Adjust this ID based on your layout
-
+            textView = itemView.findViewById(R.id.recipeName); // Adjust this ID based on your layout
         }
     }
 }

@@ -13,6 +13,12 @@
         android:theme="@style/Theme.YummyFood4Lyfe"
         tools:targetApi="31">
         <activity
+            android:name=".ConfirmAddActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddRecipeActivity"
+            android:exported="false" />
+        <activity
             android:name=".CommentActivity"
             android:exported="false" />
         <activity
@@ -28,8 +34,12 @@
         <activity android:name=".SignUpActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".HomePageActivity" />
+        <activity android:name=".ProfileActivity" />
         <activity android:name=".RecipeActivity" />
         <activity android:name=".SearchActivity" />
+        <activity android:name=".SavedRecipeActivity" />
+
+
 
         <meta-data
             android:name="preloaded_fonts"

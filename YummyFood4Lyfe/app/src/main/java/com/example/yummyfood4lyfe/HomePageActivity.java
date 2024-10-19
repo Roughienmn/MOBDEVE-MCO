@@ -9,8 +9,11 @@ import android.widget.SearchView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.util.Arrays;
 import java.util.List;
+
 
 public class HomePageActivity extends AppCompatActivity {
     EditText searchBar;
@@ -30,6 +33,31 @@ public class HomePageActivity extends AppCompatActivity {
         searchBar.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
             startActivity(intent);
+        });
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        bottomNavigationView.setSelectedItemId(R.id.home);
+
+        // nav menu
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.home) {
+                return true;
+            } else if (itemId == R.id.profile) {
+                startActivity(new Intent(HomePageActivity.this, ProfileActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            } else if (itemId == R.id.saved_recipes) {
+                startActivity(new Intent(HomePageActivity.this, SavedRecipeActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            } else if (itemId == R.id.add_recipe) {
+                startActivity(new Intent(HomePageActivity.this, AddRecipeActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            }
+            return false;
         });
     }
 }

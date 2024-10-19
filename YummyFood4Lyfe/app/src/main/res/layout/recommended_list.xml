@@ -138,7 +138,7 @@
                 android:padding="15dp">
 
                 <TextView
-                    android:id="@+id/textView20"
+                    android:id="@+id/recipeName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_semibold"
@@ -146,7 +146,7 @@
                     android:textSize="22sp" />
 
                 <TextView
-                    android:id="@+id/textView23"
+                    android:id="@+id/recipeAuthor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
@@ -171,7 +171,7 @@
                         android:textColor="@color/lightgrey" />
 
                     <TextView
-                        android:id="@+id/textView25"
+                        android:id="@+id/recipeTime"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:fontFamily="@font/poppins_medium"
