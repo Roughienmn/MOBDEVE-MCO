@@ -5,11 +5,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class ConfirmAddActivity extends AppCompatActivity {
 
@@ -27,5 +25,27 @@ public class ConfirmAddActivity extends AppCompatActivity {
             }
         });
 
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.add_recipe);
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.home) {
+                Intent intent = new Intent(ConfirmAddActivity.this, HomePageActivity.class);
+                startActivity(intent);
+                return true;
+            } else if (itemId == R.id.profile) {
+                Intent intent = new Intent(ConfirmAddActivity.this, ProfileActivity.class);
+                startActivity(intent);
+                return true;
+            } else if (itemId == R.id.saved_recipes) {
+                Intent intent = new Intent(ConfirmAddActivity.this, SavedRecipeActivity.class);
+                startActivity(intent);
+                return true;
+            } else if (itemId == R.id.add_recipe) {
+                return true;
+            }
+            return false;
+        });
     }
 }
