@@ -1,15 +1,8 @@
 package com.example.yummyfood4lyfe;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
-import android.app.Activity;
-import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.EditText;
-import android.widget.SearchView;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,9 +12,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.Arrays;
 import java.util.List;
 
-
 public class HomePageActivity extends AppCompatActivity {
-    EditText searchBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,37 +25,51 @@ public class HomePageActivity extends AppCompatActivity {
         RecommendedListAdapter adapter = new RecommendedListAdapter(this, dataList);
         recyclerView.setAdapter(adapter);
 
-        searchBar = findViewById(R.id.searchBar);
-        searchBar.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
+        ImageButton breakfastButton = findViewById(R.id.Breakfast);
+        ImageButton lunchButton = findViewById(R.id.Lunch);
+        ImageButton dinnerButton = findViewById(R.id.Dinner);
+        ImageButton dessertButton = findViewById(R.id.Desserts);
+
+        breakfastButton.setOnClickListener(v -> {
+            Intent intent = new Intent(HomePageActivity.this, CategoryBreakfast.class);
+            startActivity(intent);
+        });
+
+        lunchButton.setOnClickListener(v -> {
+            Intent intent = new Intent(HomePageActivity.this, CategoryLunch.class);
+            startActivity(intent);
+        });
+
+        dinnerButton.setOnClickListener(v -> {
+            Intent intent = new Intent(HomePageActivity.this, CategoryDinner.class);
+            startActivity(intent);
+        });
+
+        dessertButton.setOnClickListener(v -> {
+            Intent intent = new Intent(HomePageActivity.this, CategoryDessert.class);
             startActivity(intent);
         });
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-
         bottomNavigationView.setSelectedItemId(R.id.home);
 
-        // nav menu
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.home) {
                 return true;
             } else if (itemId == R.id.profile) {
-                //startActivity(new Intent(HomePageActivity.this, ProfileActivity.class));
                 Intent intent = new Intent(HomePageActivity.this, ProfileActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
                 return true;
             } else if (itemId == R.id.saved_recipes) {
-                //startActivity(new Intent(HomePageActivity.this, SavedRecipeActivity.class));
                 Intent intent = new Intent(HomePageActivity.this, SavedRecipeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
                 return true;
             } else if (itemId == R.id.add_recipe) {
-                //startActivity(new Intent(HomePageActivity.this, AddRecipeActivity.class));
                 Intent intent = new Intent(HomePageActivity.this, AddRecipeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);

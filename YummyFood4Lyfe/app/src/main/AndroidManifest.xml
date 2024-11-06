@@ -38,6 +38,10 @@
         <activity android:name=".RecipeActivity" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".SavedRecipeActivity" />
+        <activity android:name=".CategoryBreakfast" />
+        <activity android:name=".CategoryLunch" />
+        <activity android:name=".CategoryDinner" />
+        <activity android:name=".CategoryDessert" />
 
 
 
