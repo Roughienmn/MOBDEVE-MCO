@@ -1,4 +1,4 @@
-package com.example.yummyfood4lyfe;
+package com.example.yummyfood4lyfe.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.yummyfood4lyfe.R;
 
 public class SplashScreenActivity extends AppCompatActivity {
     @Override

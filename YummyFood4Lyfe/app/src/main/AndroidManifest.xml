@@ -13,16 +13,16 @@
         android:theme="@style/Theme.YummyFood4Lyfe"
         tools:targetApi="31">
         <activity
-            android:name=".ConfirmAddActivity"
+            android:name=".activities.ConfirmAddActivity"
             android:exported="false" />
         <activity
-            android:name=".AddRecipeActivity"
+            android:name=".activities.AddRecipeActivity"
             android:exported="false" />
         <activity
-            android:name=".CommentActivity"
+            android:name=".activities.CommentActivity"
             android:exported="false" />
         <activity
-            android:name=".LoaderActivity"
+            android:name=".activities.LoaderActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,14 +30,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SplashScreenActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".HomePageActivity" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".RecipeActivity" />
-        <activity android:name=".SearchActivity" />
-        <activity android:name=".SavedRecipeActivity" />
+        <activity android:name=".activities.SplashScreenActivity" />
+        <activity android:name=".activities.SignUpActivity" />
+        <activity android:name=".activities.LoginActivity" />
+        <activity android:name=".activities.HomePageActivity" />
+        <activity android:name=".activities.ProfileActivity" />
+        <activity android:name=".activities.SavedRecipeActivity$RecipeActivity" />
+        <activity android:name=".activities.SearchActivity" />
+        <activity android:name=".activities.SavedRecipeActivity" />
         <activity android:name=".CategoryBreakfast" />
         <activity android:name=".CategoryLunch" />
         <activity android:name=".CategoryDinner" />

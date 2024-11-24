@@ -1,17 +1,19 @@
-package com.example.yummyfood4lyfe;
+package com.example.yummyfood4lyfe.activities;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
-import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ScrollView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.yummyfood4lyfe.R;
+import com.example.yummyfood4lyfe.classes.Recipe;
+import com.example.yummyfood4lyfe.RecipeListAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -51,6 +53,7 @@ public class SavedRecipeActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
+                finish();
                 return true;
             } else if (itemId == R.id.profile) {
                 //startActivity(new Intent(SavedRecipeActivity.this, ProfileActivity.class));
@@ -58,6 +61,7 @@ public class SavedRecipeActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
+                finish();
                 return true;
             } else if (itemId == R.id.saved_recipes) {
                 return true;
@@ -67,6 +71,7 @@ public class SavedRecipeActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
+                finish();
                 return true;
             }
             return false;
@@ -78,5 +83,47 @@ public class SavedRecipeActivity extends AppCompatActivity {
         super.onResume();
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.saved_recipes);
+    }
+
+    public static class RecipeActivity extends AppCompatActivity {
+        private ScrollView ingredientsScroll;
+        private ScrollView stepsScroll;
+        private Button ingredientsButton;
+        private Button stepsButton;
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_recipe);
+
+            ingredientsScroll = findViewById(R.id.ingredients_scroll);
+            stepsScroll = findViewById(R.id.steps);
+            ingredientsButton = findViewById(R.id.ingredient_btn);
+            stepsButton = findViewById(R.id.steps_btn);
+
+            ingredientsButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ingredientsScroll.setVisibility(View.VISIBLE);
+                    stepsScroll.setVisibility(View.GONE);
+                    ingredientsButton.setBackgroundResource(R.drawable.button_pressed_background);
+                    ingredientsButton.setTextColor(ContextCompat.getColor(RecipeActivity.this, android.R.color.white));
+                    stepsButton.setBackgroundResource(android.R.color.transparent);
+                    stepsButton.setTextColor(ContextCompat.getColor(RecipeActivity.this, android.R.color.black));
+                }
+            });
+
+            stepsButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ingredientsScroll.setVisibility(View.GONE);
+                    stepsScroll.setVisibility(View.VISIBLE);
+                    stepsButton.setBackgroundResource(R.drawable.button_pressed_background);
+                    stepsButton.setTextColor(ContextCompat.getColor(RecipeActivity.this, android.R.color.white));
+                    ingredientsButton.setBackgroundResource(android.R.color.transparent);
+                    ingredientsButton.setTextColor(ContextCompat.getColor(RecipeActivity.this, android.R.color.black));
+                }
+            });
+        }
     }
 }

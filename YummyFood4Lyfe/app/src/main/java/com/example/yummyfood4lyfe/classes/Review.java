@@ -1,7 +1,4 @@
-package com.example.yummyfood4lyfe;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.example.yummyfood4lyfe.classes;
 
 public class Review {
 

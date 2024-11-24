@@ -1,4 +1,4 @@
-package com.example.yummyfood4lyfe;
+package com.example.yummyfood4lyfe.classes;
 
 public class Recipe {
     private String title;

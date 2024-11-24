@@ -11,6 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.yummyfood4lyfe.activities.CommentActivity;
+import com.example.yummyfood4lyfe.classes.Review;
+
 import java.util.List;
 
 public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.ReviewViewHolder> {

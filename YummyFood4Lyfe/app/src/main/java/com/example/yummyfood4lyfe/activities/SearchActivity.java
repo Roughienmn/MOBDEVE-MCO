@@ -1,4 +1,4 @@
-package com.example.yummyfood4lyfe;
+package com.example.yummyfood4lyfe.activities;
 
 import static java.util.Locale.filter;
 
@@ -10,10 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,10 +19,11 @@ import android.widget.ImageView;
 //import com.example.yummyfood4lyfe.RoomDB.User;
 //import com.example.yummyfood4lyfe.RoomDB.UserDao;
 
-import java.util.ArrayList;
+import com.example.yummyfood4lyfe.R;
+import com.example.yummyfood4lyfe.RecommendedListAdapter;
+
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 public class SearchActivity extends AppCompatActivity {
 

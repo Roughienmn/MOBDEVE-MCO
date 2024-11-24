@@ -9,6 +9,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.yummyfood4lyfe.activities.CommentActivity;
+import com.example.yummyfood4lyfe.activities.SavedRecipeActivity;
+
 import java.util.List;
 
 public class RecommendedListAdapter extends RecyclerView.Adapter<RecommendedListAdapter.ViewHolder> {
@@ -33,7 +37,7 @@ public class RecommendedListAdapter extends RecyclerView.Adapter<RecommendedList
         String data = dataList.get(position);
         holder.textView.setText(data);
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, RecipeActivity.class);
+            Intent intent = new Intent(context, SavedRecipeActivity.RecipeActivity.class);
             context.startActivity(intent);
         });
         holder.commentButton.setOnClickListener(v -> {

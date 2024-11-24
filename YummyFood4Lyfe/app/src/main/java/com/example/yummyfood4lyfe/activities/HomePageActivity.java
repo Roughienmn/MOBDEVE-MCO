@@ -1,12 +1,14 @@
-package com.example.yummyfood4lyfe;
+package com.example.yummyfood4lyfe.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.yummyfood4lyfe.R;
+import com.example.yummyfood4lyfe.RecommendedListAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.Arrays;
@@ -25,31 +27,6 @@ public class HomePageActivity extends AppCompatActivity {
         RecommendedListAdapter adapter = new RecommendedListAdapter(this, dataList);
         recyclerView.setAdapter(adapter);
 
-        ImageButton breakfastButton = findViewById(R.id.Breakfast);
-        ImageButton lunchButton = findViewById(R.id.Lunch);
-        ImageButton dinnerButton = findViewById(R.id.Dinner);
-        ImageButton dessertButton = findViewById(R.id.Desserts);
-
-        breakfastButton.setOnClickListener(v -> {
-            Intent intent = new Intent(HomePageActivity.this, CategoryBreakfast.class);
-            startActivity(intent);
-        });
-
-        lunchButton.setOnClickListener(v -> {
-            Intent intent = new Intent(HomePageActivity.this, CategoryLunch.class);
-            startActivity(intent);
-        });
-
-        dinnerButton.setOnClickListener(v -> {
-            Intent intent = new Intent(HomePageActivity.this, CategoryDinner.class);
-            startActivity(intent);
-        });
-
-        dessertButton.setOnClickListener(v -> {
-            Intent intent = new Intent(HomePageActivity.this, CategoryDessert.class);
-            startActivity(intent);
-        });
-
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.home);
 
@@ -62,18 +39,21 @@ public class HomePageActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
+                finish();
                 return true;
             } else if (itemId == R.id.saved_recipes) {
                 Intent intent = new Intent(HomePageActivity.this, SavedRecipeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
+                finish();
                 return true;
             } else if (itemId == R.id.add_recipe) {
                 Intent intent = new Intent(HomePageActivity.this, AddRecipeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
+                finish();
                 return true;
             }
             return false;

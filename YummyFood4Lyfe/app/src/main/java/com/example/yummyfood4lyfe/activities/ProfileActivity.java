@@ -1,17 +1,18 @@
-package com.example.yummyfood4lyfe;
+package com.example.yummyfood4lyfe.activities;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
-import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.yummyfood4lyfe.R;
+import com.example.yummyfood4lyfe.classes.Recipe;
+import com.example.yummyfood4lyfe.RecipeListAdapter;
+import com.example.yummyfood4lyfe.classes.Review;
+import com.example.yummyfood4lyfe.ReviewListAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 
@@ -84,6 +85,7 @@ public class ProfileActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
+                finish();
                 return true;
             } else if (itemId == R.id.profile) {
                 return true;
@@ -93,6 +95,7 @@ public class ProfileActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
+                finish();
                 return true;
             } else if (itemId == R.id.add_recipe) {
                 //startActivity(new Intent(ProfileActivity.this, AddRecipeActivity.class));
@@ -100,6 +103,7 @@ public class ProfileActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
+                finish();
                 return true;
             }
             return false;

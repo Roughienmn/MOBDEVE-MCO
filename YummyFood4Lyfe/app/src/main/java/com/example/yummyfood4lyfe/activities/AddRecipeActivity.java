@@ -1,26 +1,14 @@
-package com.example.yummyfood4lyfe;
+package com.example.yummyfood4lyfe.activities;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
-import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
+import com.example.yummyfood4lyfe.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.util.List;
 
 public class AddRecipeActivity extends AppCompatActivity {
 
@@ -51,6 +39,7 @@ public class AddRecipeActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
+                finish();
                 return true;
             } else if (itemId == R.id.profile) {
                 //startActivity(new Intent(AddRecipeActivity.this, ProfileActivity.class));
@@ -58,6 +47,7 @@ public class AddRecipeActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
+                finish();
                 return true;
             } else if (itemId == R.id.saved_recipes) {
                 //startActivity(new Intent(AddRecipeActivity.this, SavedRecipeActivity.class));
@@ -65,6 +55,7 @@ public class AddRecipeActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
+                finish();
                 return true;
             } else if (itemId == R.id.add_recipe) {
                 return true;
