@@ -1,6 +1,7 @@
 package com.example.yummyfood4lyfe.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,14 +14,23 @@ public class LoaderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loader);
 
-        // Delay for 2 seconds and then start SplashScreenActivity
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+        boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+        // Delay and then start SplashScreenActivity
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                if(isLoggedIn){
+                    Intent intent = new Intent(LoaderActivity.this, HomePageActivity.class);
+                    startActivity(intent);
+                    finish();
+                    return;
+                }
+
                 Intent intent = new Intent(LoaderActivity.this, SplashScreenActivity.class);
                 startActivity(intent);
                 finish();
             }
-        }, 2000); // 2000 milliseconds = 2 seconds
+        }, 1500);
     }
 }

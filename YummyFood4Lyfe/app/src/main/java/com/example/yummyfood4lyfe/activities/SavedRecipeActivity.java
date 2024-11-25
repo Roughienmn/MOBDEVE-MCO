@@ -97,7 +97,7 @@ public class SavedRecipeActivity extends AppCompatActivity {
             setContentView(R.layout.activity_recipe);
 
             ingredientsScroll = findViewById(R.id.ingredients_scroll);
-            stepsScroll = findViewById(R.id.steps);
+            stepsScroll = findViewById(R.id.instructions);
             ingredientsButton = findViewById(R.id.ingredient_btn);
             stepsButton = findViewById(R.id.steps_btn);
 

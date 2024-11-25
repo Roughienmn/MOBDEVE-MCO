@@ -50,7 +50,7 @@
         app:layout_constraintVertical_bias="0.17" />
 
     <EditText
-        android:id="@+id/editTextText"
+        android:id="@+id/username"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_margin="30dp"
@@ -81,13 +81,13 @@
         app:layout_constraintVertical_bias="0.308" />
 
     <EditText
-        android:id="@+id/editTextText2"
+        android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_margin="30dp"
         android:background="@drawable/edittext_background"
         android:ems="10"
-        android:hint="Enter Email"
+        android:hint="youremail@site.com"
         android:inputType="textEmailAddress"
         android:paddingStart="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -112,15 +112,15 @@
         app:layout_constraintVertical_bias="0.447" />
 
     <EditText
-        android:id="@+id/editTextDate"
+        android:id="@+id/birthday_day"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:background="@drawable/edittext_background"
         android:ems="10"
-        android:hint="Enter Birthdate"
-        android:inputType="date"
+        android:hint="MM-DD-YYYY"
+        android:inputType="none"
+        android:focusable="false"
         android:paddingStart="16dp"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.144"
@@ -143,7 +143,7 @@
         app:layout_constraintVertical_bias="0.588" />
 
     <EditText
-        android:id="@+id/editTextText4"
+        android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_margin="30dp"
@@ -174,7 +174,7 @@
         app:layout_constraintVertical_bias="0.728" />
 
     <EditText
-        android:id="@+id/editTextText5"
+        android:id="@+id/confirmpassword"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_margin="30dp"
@@ -233,4 +233,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.934" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

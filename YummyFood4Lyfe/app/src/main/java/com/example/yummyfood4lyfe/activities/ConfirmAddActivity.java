@@ -34,14 +34,17 @@ public class ConfirmAddActivity extends AppCompatActivity {
             if (itemId == R.id.home) {
                 Intent intent = new Intent(ConfirmAddActivity.this, HomePageActivity.class);
                 startActivity(intent);
+                finish();
                 return true;
             } else if (itemId == R.id.profile) {
                 Intent intent = new Intent(ConfirmAddActivity.this, ProfileActivity.class);
                 startActivity(intent);
+                finish();
                 return true;
             } else if (itemId == R.id.saved_recipes) {
                 Intent intent = new Intent(ConfirmAddActivity.this, SavedRecipeActivity.class);
                 startActivity(intent);
+                finish();
                 return true;
             } else if (itemId == R.id.add_recipe) {
                 return true;

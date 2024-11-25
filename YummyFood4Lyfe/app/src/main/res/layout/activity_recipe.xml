@@ -21,7 +21,6 @@
         android:id="@+id/recipe_img"
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        android:layout_marginTop="0dp"
         android:background="#F6F6F6"
         android:hapticFeedbackEnabled="true"
         android:scaleType="centerCrop"
@@ -219,7 +218,7 @@
         </ScrollView>
 
         <ScrollView
-            android:id="@+id/steps"
+            android:id="@+id/instructions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/ingredient_btn"

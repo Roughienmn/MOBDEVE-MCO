@@ -84,7 +84,7 @@
                 android:layout_marginBottom="8dp" />
 
             <EditText
-                android:id="@+id/recipeTitle"
+                android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter recipe title here..."
@@ -121,9 +121,10 @@
                 android:id="@+id/servings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter number of servings here..."
                 android:layout_marginBottom="24dp"
-                android:background="@android:color/transparent"/>
+                android:background="@android:color/transparent"
+                android:hint="Enter number of servings here..."
+                android:inputType="number" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -152,34 +153,29 @@
                 android:layout_marginBottom="8dp" />
 
             <EditText
-                android:id="@+id/steps"
+                android:id="@+id/instructions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter steps here..."
                 android:layout_marginBottom="24dp"
                 android:background="@android:color/transparent"/>
+
+            <Button
+                android:id="@+id/publishButton"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="20dp"
+                android:backgroundTint="@color/green"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="Publish Recipe"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
         </LinearLayout>
     </ScrollView>
 
-
-    <Button
-        android:id="@+id/publishButton"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="Publish Recipe"
-        android:backgroundTint="@color/green"
-        android:textColor="@color/white"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="20dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:textSize="18sp"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"

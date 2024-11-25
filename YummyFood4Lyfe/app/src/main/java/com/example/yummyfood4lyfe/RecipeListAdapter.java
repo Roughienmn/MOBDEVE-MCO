@@ -41,7 +41,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
         Recipe recipe = recipeList.get(position);
         holder.recipeName.setText(recipe.getTitle());
         holder.recipeAuthor.setText("By " + recipe.getAuthor());
-        holder.recipeTime.setText(recipe.getTime());
+        holder.recipeTime.setText(recipe.getCookingTime());
         holder.recipeImage.setImageResource(recipe.getRecipeImage());
 
         holder.itemView.setOnClickListener(v -> {
