@@ -118,18 +118,18 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageButton
-                    android:id="@+id/imageButton2"
+                    android:id="@+id/favoriteButton"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginEnd="16dp"
-                    android:background="@android:color/transparent"
+                    android:background="@drawable/circle_background"
                     android:contentDescription="Bookmark"
-                    android:scaleType="fitXY"
+                    android:scaleType="centerInside"
                     app:layout_constraintBottom_toBottomOf="@id/recommended_img"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/recommended_img"
                     app:layout_constraintVertical_bias="0.122"
-                    app:srcCompat="@drawable/bookmark_btn_with_circle" />
+                    app:srcCompat="@drawable/bookmark_notsaved" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout

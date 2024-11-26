@@ -9,13 +9,14 @@ import com.google.firebase.database.ValueEventListener;
 
 public class FirebaseDBHelper {
     FirebaseDatabase database;
-    DatabaseReference userRef, recipeRef, reviewRef;
+    DatabaseReference userRef, recipeRef, reviewRef, savedRef;
 
     public FirebaseDBHelper(){
         database = FirebaseDatabase.getInstance();
         userRef = database.getReference(MyFirestoreReferences.USERS_COLLECTION);
         recipeRef = database.getReference(MyFirestoreReferences.RECIPES_COLLECTION);
         reviewRef = database.getReference(MyFirestoreReferences.REVIEWS_COLLECTION);
+        savedRef = database.getReference(MyFirestoreReferences.SAVED_COLLECTION);
     }
 
     public void insertUser(User user, OnDBOperationListener<String> listener) {
@@ -136,6 +137,42 @@ public class FirebaseDBHelper {
 
     public Query getUserById(String userId) {
         return userRef.orderByChild("userid").equalTo(userId);
+    }
+
+    public void insertSavedRecipe(String userId, String recipeId, OnDBOperationListener<Void> listener) {
+        savedRef.child(userId).child(recipeId).setValue(true)
+                .addOnSuccessListener(aVoid -> listener.onSuccess(null))
+                .addOnFailureListener(listener::onFailure);
+    }
+
+    public void removeSavedRecipe(String userId, String recipeId, OnDBOperationListener<Void> listener) {
+        savedRef.child(userId).child(recipeId).removeValue()
+                .addOnSuccessListener(aVoid -> listener.onSuccess(null))
+                .addOnFailureListener(listener::onFailure);
+    }
+
+    public void toggleSavedRecipe(String userId, String recipeId, OnDBOperationListener<Void> listener) {
+        savedRef.child(userId).child(recipeId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // Recipe is already saved, remove it
+                    removeSavedRecipe(userId, recipeId, listener);
+                } else {
+                    // Recipe is not saved, add it
+                    insertSavedRecipe(userId, recipeId, listener);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                listener.onFailure(databaseError.toException());
+            }
+        });
+    }
+
+    public DatabaseReference getSavedRecipesRef(String userId) {
+        return savedRef.child(userId);
     }
 
     public interface OnDBOperationListener<T>{
