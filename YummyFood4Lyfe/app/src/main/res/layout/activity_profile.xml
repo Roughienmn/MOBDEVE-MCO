@@ -133,11 +133,10 @@
             android:id="@+id/profileUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
             android:text="\@sampleusername"
-            android:textSize="14sp"
             android:textColor="@color/lightgrey"
-            android:layout_marginTop="-10dp"
-            android:layout_marginBottom="16dp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/profileBio"

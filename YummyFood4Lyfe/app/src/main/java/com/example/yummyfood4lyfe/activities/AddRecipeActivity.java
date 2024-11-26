@@ -83,11 +83,11 @@ public class AddRecipeActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.add_recipe);
     }
 
-    private void onPublishButtonClick(View v){
+    private void onPublishButtonClick(View v) {
         SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
 
-        //check if all fields are filled
-        if(title.getText().toString().isEmpty() || cookingTime.getText().toString().isEmpty() || servings.getText().toString().isEmpty() || ingredients.getText().toString().isEmpty() || instructions.getText().toString().isEmpty()){
+        // Check if all fields are filled
+        if (title.getText().toString().isEmpty() || cookingTime.getText().toString().isEmpty() || servings.getText().toString().isEmpty() || ingredients.getText().toString().isEmpty() || instructions.getText().toString().isEmpty()) {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -95,7 +95,13 @@ public class AddRecipeActivity extends AppCompatActivity {
         String username = sharedPreferences.getString("username", null);
         String titleText = title.getText().toString();
         String cookingTimeText = cookingTime.getText().toString();
-        int servingsInt = Integer.parseInt(servings.getText().toString());
+        int servingsInt;
+        try {
+            servingsInt = Integer.parseInt(servings.getText().toString());
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Invalid number format for servings", Toast.LENGTH_SHORT).show();
+            return;
+        }
         int recipeImage = R.drawable.chicken_adobo_sample;
         String ingredientsText = ingredients.getText().toString();
         String instructionsText = instructions.getText().toString();
@@ -105,7 +111,13 @@ public class AddRecipeActivity extends AppCompatActivity {
         firebaseDB.insertRecipe(newRecipe, new FirebaseDBHelper.OnDBOperationListener<Void>() {
             @Override
             public void onSuccess(Void result) {
-                Toast.makeText(AddRecipeActivity.this, "Recipe added successfully", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(AddRecipeActivity.this, ConfirmAddActivity.class);
+                startActivityForResult(intent, 1);
+                title.setText("");
+                cookingTime.setText("");
+                servings.setText("");
+                ingredients.setText("");
+                instructions.setText("");
             }
 
             @Override
@@ -113,9 +125,15 @@ public class AddRecipeActivity extends AppCompatActivity {
                 Toast.makeText(AddRecipeActivity.this, "Error adding recipe: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
 
-        Intent intent = new Intent(AddRecipeActivity.this, ConfirmAddActivity.class);
-        startActivity(intent);
-        finish();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                finish();
+            }
+        }
     }
 }

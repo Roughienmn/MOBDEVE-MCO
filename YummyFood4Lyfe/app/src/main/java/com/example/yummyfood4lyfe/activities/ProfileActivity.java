@@ -1,56 +1,162 @@
 package com.example.yummyfood4lyfe.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.yummyfood4lyfe.CommentListAdapter;
 import com.example.yummyfood4lyfe.R;
+import com.example.yummyfood4lyfe.RecommendedListAdapter;
+import com.example.yummyfood4lyfe.classes.FirebaseDBHelper;
 import com.example.yummyfood4lyfe.classes.Recipe;
 import com.example.yummyfood4lyfe.RecipeListAdapter;
 import com.example.yummyfood4lyfe.classes.Review;
 import com.example.yummyfood4lyfe.ReviewListAdapter;
+import com.example.yummyfood4lyfe.classes.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerViewRecipes, recyclerViewReviews;
-    private RecipeListAdapter recipeListAdapter;
-    private ReviewListAdapter reviewListAdapter;
+    private RecyclerView recyclerViewRecipes, commentRecyclerView;
+    private CommentListAdapter commentListAdapter;
+    private RecommendedListAdapter recipeListAdapter;
     private List<Recipe> recipeList = new ArrayList<>();
-    private List<Review> reviewList = new ArrayList<>();
+    private List<Review> commentList = new ArrayList<>();
+    private FirebaseDBHelper firebaseDB;
+    private User user;
+
+    private TextView profileUsername, profileName, profileBio, recipesCount, reviewsCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+        String username = sharedPreferences.getString("username", null);
+        String userid = sharedPreferences.getString("userid", null);
+
+        firebaseDB = new FirebaseDBHelper();
+
+        profileUsername = findViewById(R.id.profileUsername);
+        profileName = findViewById(R.id.profileName);
+        profileBio = findViewById(R.id.profileBio);
+        recipesCount = findViewById(R.id.recipesCount);
+        reviewsCount = findViewById(R.id.reviewsCount);
+
         recyclerViewRecipes = findViewById(R.id.recyclerViewRecipes);
-        recyclerViewReviews = findViewById(R.id.recyclerViewReviews);
+        commentRecyclerView = findViewById(R.id.recyclerViewReviews);
 
         recyclerViewRecipes.setLayoutManager(new LinearLayoutManager(this));
-        recyclerViewReviews.setLayoutManager(new LinearLayoutManager(this));
+        commentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        //recipeList.add(new Recipe("Classic Chicken Adobo", "Rafael Gamboa", "1 Hour", R.drawable.chicken_adobo_sample));
-        //recipeList.add(new Recipe("Classic Chicken Adobo", "Rafael Gamboa", "30 Minutes", R.drawable.chicken_adobo_sample));
-        recipeListAdapter = new RecipeListAdapter(recipeList, this);
+        recipeListAdapter = new RecommendedListAdapter(this, recipeList);
         recyclerViewRecipes.setAdapter(recipeListAdapter);
 
-        //reviewList.add(new Review("Raffy Gamboa", "2 minutes ago", "This sucks.", R.drawable.profile_placeholder, new int[]{}));
-        //reviewList.add(new Review("Raffy Gamboa", "11 months ago", "Great recipe!", R.drawable.profile_placeholder, new int[]{R.drawable.chicken_adobo_sample}));
-        //reviewList.add(new Review("Raffy Gamboa", "1 year ago", "Loved it!", R.drawable.profile_placeholder, new int[]{R.drawable.chicken_adobo_sample, R.drawable.chicken_adobo_sample}));
-        reviewListAdapter = new ReviewListAdapter(reviewList, this);
-        recyclerViewReviews.setAdapter(reviewListAdapter);
+        commentListAdapter = new CommentListAdapter(commentList, this);
+        commentRecyclerView.setAdapter(commentListAdapter);
 
         recyclerViewRecipes.setVisibility(View.VISIBLE);
-        recyclerViewReviews.setVisibility(View.GONE);
+        commentRecyclerView.setVisibility(View.GONE);
+
+        firebaseDB.getRecipesByUsername(username).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                recipeList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Recipe recipe = snapshot.getValue(Recipe.class);
+                    recipeList.add(recipe);
+                }
+                Collections.reverse(recipeList);
+                recipeListAdapter.notifyDataSetChanged();
+
+                recipesCount.setText(String.valueOf(recipeList.size()));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(ProfileActivity.this, "Error fetching recipes: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        firebaseDB.getReviewsByUser(username).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                commentList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Review review = snapshot.getValue(Review.class);
+                    if (review != null) {
+                        commentList.add(review);
+                    }
+                }
+                if (commentList.isEmpty()) {
+                    Toast.makeText(ProfileActivity.this, "No reviews found", Toast.LENGTH_SHORT).show();
+                }
+                Collections.reverse(commentList);
+                commentListAdapter.notifyDataSetChanged();
+
+                reviewsCount.setText(String.valueOf(commentList.size()));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(ProfileActivity.this, "Error fetching reviews: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        firebaseDB.getUserById(userid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                        user = userSnapshot.getValue(User.class);
+                        if (user != null) {
+                            profileUsername.setText("@" + user.getUsername());
+                            String userName = user.getName();
+                            String userBio = user.getBio();
+
+                            if(userName != null && !userName.isEmpty()) {
+                                profileName.setText(userName);
+                            } else {
+                                profileName.setVisibility(View.GONE);
+                                profileUsername.setTextSize(20);
+                                profileUsername.setTypeface(ResourcesCompat.getFont(ProfileActivity.this, R.font.poppins_semibold));
+                                profileUsername.setTextColor(getResources().getColor(R.color.black));
+                            }
+
+                            if(userBio != null && !userBio.isEmpty()) {
+                                profileBio.setText(userBio);
+                            } else {
+                                profileBio.setText("No Bio.");
+                            }
+                        }
+                    }
+                } else {
+                    Toast.makeText(ProfileActivity.this, "User not found", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(ProfileActivity.this, "Error fetching user: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
         // tab switching
         TabLayout tabLayout = findViewById(R.id.profileTabs);
@@ -59,10 +165,10 @@ public class ProfileActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 0) {
                     recyclerViewRecipes.setVisibility(View.VISIBLE);
-                    recyclerViewReviews.setVisibility(View.GONE);
+                    commentRecyclerView.setVisibility(View.GONE);
                 } else {
                     recyclerViewRecipes.setVisibility(View.GONE);
-                    recyclerViewReviews.setVisibility(View.VISIBLE);
+                    commentRecyclerView.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -80,7 +186,6 @@ public class ProfileActivity extends AppCompatActivity {
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.home) {
-                //startActivity(new Intent(ProfileActivity.this, HomePageActivity.class));
                 Intent intent = new Intent(ProfileActivity.this, HomePageActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
@@ -90,7 +195,6 @@ public class ProfileActivity extends AppCompatActivity {
             } else if (itemId == R.id.profile) {
                 return true;
             } else if (itemId == R.id.saved_recipes) {
-                //startActivity(new Intent(ProfileActivity.this, SavedRecipeActivity.class));
                 Intent intent = new Intent(ProfileActivity.this, SavedRecipeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
@@ -98,7 +202,6 @@ public class ProfileActivity extends AppCompatActivity {
                 finish();
                 return true;
             } else if (itemId == R.id.add_recipe) {
-                //startActivity(new Intent(ProfileActivity.this, AddRecipeActivity.class));
                 Intent intent = new Intent(ProfileActivity.this, AddRecipeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);

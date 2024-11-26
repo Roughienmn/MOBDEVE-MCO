@@ -21,35 +21,11 @@ public class ConfirmAddActivity extends AppCompatActivity {
         viewRecipeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ConfirmAddActivity.this, ProfileActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setSelectedItemId(R.id.add_recipe);
-
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.home) {
-                Intent intent = new Intent(ConfirmAddActivity.this, HomePageActivity.class);
-                startActivity(intent);
-                finish();
-                return true;
-            } else if (itemId == R.id.profile) {
+                setResult(RESULT_OK);
                 Intent intent = new Intent(ConfirmAddActivity.this, ProfileActivity.class);
                 startActivity(intent);
                 finish();
-                return true;
-            } else if (itemId == R.id.saved_recipes) {
-                Intent intent = new Intent(ConfirmAddActivity.this, SavedRecipeActivity.class);
-                startActivity(intent);
-                finish();
-                return true;
-            } else if (itemId == R.id.add_recipe) {
-                return true;
             }
-            return false;
         });
     }
 }

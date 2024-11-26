@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CommentActivity extends AppCompatActivity {
@@ -70,6 +71,7 @@ public class CommentActivity extends AppCompatActivity {
                     Review review = snapshot.getValue(Review.class);
                     commentList.add(review);
                 }
+                Collections.reverse(commentList);
                 commentListAdapter.notifyDataSetChanged();
             }
 

@@ -15,9 +15,13 @@ import com.example.yummyfood4lyfe.RecommendedListAdapter;
 import com.example.yummyfood4lyfe.classes.FirebaseDBHelper;
 import com.example.yummyfood4lyfe.classes.Recipe;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class HomePageActivity extends AppCompatActivity {
@@ -36,20 +40,26 @@ public class HomePageActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.rcview_recommended);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        firebaseDB.getLatestRecipes(10, new FirebaseDBHelper.OnDBOperationListener<List<Recipe>>() {
+        RecommendedListAdapter adapter = new RecommendedListAdapter(this, recipeList);
+        recyclerView.setAdapter(adapter);
+
+        firebaseDB.getLatestRecipes(20).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onSuccess(List<Recipe> result) {
-                recipeList = result;
-                recyclerView.setAdapter(new RecommendedListAdapter(HomePageActivity.this, recipeList));
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                recipeList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Recipe recipe = snapshot.getValue(Recipe.class);
+                    recipeList.add(recipe);
+                }
+                Collections.reverse(recipeList);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onFailure(Exception e) {
-                Toast.makeText(HomePageActivity.this, "Error fetching recipes: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(HomePageActivity.this, "Error fetching recipes: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-        RecommendedListAdapter adapter = new RecommendedListAdapter(this, recipeList);
-        recyclerView.setAdapter(adapter);
 
         userGreeting = findViewById(R.id.userGreeting);
         userGreeting.setText("Hello, " + username + "!");
