@@ -12,7 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.yummyfood4lyfe.activities.SavedRecipeActivity;
+import com.example.yummyfood4lyfe.activities.RecipeActivity;
 import com.example.yummyfood4lyfe.classes.Recipe;
 
 import java.util.List;
@@ -45,7 +45,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
         holder.recipeImage.setImageResource(recipe.getRecipeImage());
 
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, SavedRecipeActivity.RecipeActivity.class);
+            Intent intent = new Intent(context, RecipeActivity.class);
             context.startActivity(intent);
         });
     }

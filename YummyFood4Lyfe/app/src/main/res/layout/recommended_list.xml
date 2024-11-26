@@ -186,8 +186,8 @@
 
                         <ImageButton
                             android:id="@+id/commentButton"
-                            android:layout_width="37dp"
-                            android:layout_height="match_parent"
+                            android:layout_width="33dp"
+                            android:layout_height="32dp"
                             android:layout_gravity="end"
                             android:background="@android:color/transparent"
                             android:contentDescription="commentButton"

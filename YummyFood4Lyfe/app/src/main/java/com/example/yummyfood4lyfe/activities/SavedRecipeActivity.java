@@ -84,7 +84,7 @@ public class SavedRecipeActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.saved_recipes);
     }
-
+/*
     public static class RecipeActivity extends AppCompatActivity {
         private ScrollView ingredientsScroll;
         private ScrollView stepsScroll;
@@ -126,4 +126,5 @@ public class SavedRecipeActivity extends AppCompatActivity {
             });
         }
     }
+ */
 }

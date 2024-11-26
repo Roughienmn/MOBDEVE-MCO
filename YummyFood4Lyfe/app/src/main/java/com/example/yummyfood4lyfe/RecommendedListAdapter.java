@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.yummyfood4lyfe.activities.CommentActivity;
+import com.example.yummyfood4lyfe.activities.RecipeActivity;
 import com.example.yummyfood4lyfe.activities.SavedRecipeActivity;
 import com.example.yummyfood4lyfe.classes.Recipe;
 
@@ -41,7 +42,7 @@ public class RecommendedListAdapter extends RecyclerView.Adapter<RecommendedList
         holder.recipeTime.setText(recipe.getCookingTime());
 
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, SavedRecipeActivity.RecipeActivity.class);
+            Intent intent = new Intent(context, RecipeActivity.class);
             intent.putExtra("username", recipe.getUsername());
             intent.putExtra("title", recipe.getTitle());
             intent.putExtra("cookingTime", recipe.getCookingTime());

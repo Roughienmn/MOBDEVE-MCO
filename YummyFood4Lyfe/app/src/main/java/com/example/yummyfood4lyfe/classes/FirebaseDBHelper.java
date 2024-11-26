@@ -7,6 +7,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class FirebaseDBHelper {
@@ -114,6 +115,7 @@ public class FirebaseDBHelper {
                             Recipe recipe = recipeSnapshot.getValue(Recipe.class);
                             recipes.add(recipe);
                         }
+                        Collections.reverse(recipes);
                         listener.onSuccess(recipes);
                     }
 
