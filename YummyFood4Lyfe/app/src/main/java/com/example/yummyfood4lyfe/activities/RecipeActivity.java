@@ -1,9 +1,13 @@
 package com.example.yummyfood4lyfe.activities;
 
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.content.Intent;
@@ -27,8 +31,9 @@ public class RecipeActivity extends AppCompatActivity {
     private ScrollView ingredientsScroll, stepsScroll;
     private Button ingredientsButton, stepsButton;
     TextView title, time, username, ingredients_txt, instructions_txt;
-    private ImageButton favoriteButton;
+    private ImageButton favoriteButton, commentButton;
     private FirebaseDBHelper firebaseDB;
+    private ImageView recipe_img;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +61,8 @@ public class RecipeActivity extends AppCompatActivity {
         ingredients_txt = findViewById(R.id.ingredients_txt);
         instructions_txt = findViewById(R.id.instructions_txt);
         favoriteButton = findViewById(R.id.favoriteButton);
+        commentButton = findViewById(R.id.commentButton);
+        recipe_img = findViewById(R.id.recipe_img);
 
         Intent i = getIntent();
 
@@ -64,6 +71,16 @@ public class RecipeActivity extends AppCompatActivity {
         username.setText(i.getStringExtra("username"));
         ingredients_txt.setText(i.getStringExtra("ingredients"));
         instructions_txt.setText(i.getStringExtra("instructions"));
+
+        String recipeImgString = i.getStringExtra("recipeimage");
+
+        if(recipeImgString != null && !recipeImgString.isEmpty()) {
+            Bitmap recipeImage = decodeBase64ToImage(recipeImgString);
+            recipe_img.setImageBitmap(recipeImage);
+        }
+        else{
+            recipe_img.setImageResource(R.drawable.usericon_playstore);
+        }
 
         String recipeid = i.getStringExtra("recipeid");
 
@@ -77,6 +94,12 @@ public class RecipeActivity extends AppCompatActivity {
                 stepsButton.setBackgroundResource(android.R.color.transparent);
                 stepsButton.setTextColor(ContextCompat.getColor(RecipeActivity.this, android.R.color.black));
             }
+        });
+
+        commentButton.setOnClickListener(v -> {
+            Intent intent = new Intent(RecipeActivity.this, CommentActivity.class);
+            intent.putExtra("recipeid", recipeid);
+            RecipeActivity.this.startActivity(intent);
         });
 
         stepsButton.setOnClickListener(new View.OnClickListener() {
@@ -132,5 +155,16 @@ public class RecipeActivity extends AppCompatActivity {
                 }
             });
         });
+    }
+
+    private Bitmap decodeBase64ToImage(String encodedImage) {
+        if(encodedImage.isEmpty() || encodedImage == null) return null;
+        try {
+            byte[] decodedBytes = Base64.decode(encodedImage, Base64.DEFAULT);
+            return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

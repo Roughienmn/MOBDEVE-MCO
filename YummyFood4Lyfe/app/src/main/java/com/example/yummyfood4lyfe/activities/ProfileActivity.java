@@ -41,7 +41,7 @@ public class ProfileActivity extends AppCompatActivity {
     private FirebaseDBHelper firebaseDB;
     private User user;
 
-    private TextView profileUsername, profileName, profileBio, recipesCount, reviewsCount;
+    private TextView profileUsername, profileName, profileBio, recipesCount, reviewsCount, noEntryText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +59,7 @@ public class ProfileActivity extends AppCompatActivity {
         profileBio = findViewById(R.id.profileBio);
         recipesCount = findViewById(R.id.recipesCount);
         reviewsCount = findViewById(R.id.reviewsCount);
+        noEntryText = findViewById(R.id.noEntryText);
 
         recyclerViewRecipes = findViewById(R.id.recyclerViewRecipes);
         commentRecyclerView = findViewById(R.id.recyclerViewReviews);
@@ -87,6 +88,13 @@ public class ProfileActivity extends AppCompatActivity {
                 recipeListAdapter.notifyDataSetChanged();
 
                 recipesCount.setText(String.valueOf(recipeList.size()));
+
+                if (recipeList.isEmpty()) {
+                    noEntryText.setText("No Recipes yet");
+                    noEntryText.setVisibility(View.VISIBLE);
+                } else {
+                    noEntryText.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -106,7 +114,6 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                 }
                 if (commentList.isEmpty()) {
-                    Toast.makeText(ProfileActivity.this, "No reviews found", Toast.LENGTH_SHORT).show();
                 }
                 Collections.reverse(commentList);
                 commentListAdapter.notifyDataSetChanged();
@@ -166,9 +173,21 @@ public class ProfileActivity extends AppCompatActivity {
                 if (tab.getPosition() == 0) {
                     recyclerViewRecipes.setVisibility(View.VISIBLE);
                     commentRecyclerView.setVisibility(View.GONE);
+                    if (recipeList.isEmpty()) {
+                        noEntryText.setText("No Recipes yet");
+                        noEntryText.setVisibility(View.VISIBLE);
+                    } else {
+                        noEntryText.setVisibility(View.GONE);
+                    }
                 } else {
                     recyclerViewRecipes.setVisibility(View.GONE);
                     commentRecyclerView.setVisibility(View.VISIBLE);
+                    if (commentList.isEmpty()) {
+                        noEntryText.setText("No Reviews yet");
+                        noEntryText.setVisibility(View.VISIBLE);
+                    } else {
+                        noEntryText.setVisibility(View.GONE);
+                    }
                 }
             }
 

@@ -7,7 +7,7 @@ public class Recipe {
     private String title;
     private String cookingTime;
     private int servings;
-    private int recipeImage;
+    private String recipeImage;
     private String ingredients;
     private String instructions;
     private long timestamp;
@@ -16,7 +16,7 @@ public class Recipe {
     }
 
     // constructor for new recipe
-    public Recipe(String username, String title, String cookingTime, int servings, int recipeImage, String ingredients, String instructions) {
+    public Recipe(String username, String title, String cookingTime, int servings, String recipeImage, String ingredients, String instructions) {
         this.username = username;
         this.title = title;
         this.cookingTime = cookingTime;
@@ -28,7 +28,7 @@ public class Recipe {
     }
 
     // constructor for getting recipe from database
-    public Recipe(String recipeid, String username, String title, String cookingTime, int servings, int recipeImage, String ingredients, String instructions) {
+    public Recipe(String recipeid, String username, String title, String cookingTime, int servings, String recipeImage, String ingredients, String instructions) {
         this.recipeid = recipeid;
         this.username = username;
         this.title = title;
@@ -79,11 +79,11 @@ public class Recipe {
         this.servings = servings;
     }
 
-    public int getRecipeImage() {
+    public String getRecipeImage() {
         return recipeImage;
     }
 
-    public void setRecipeImage(int recipeImage) {
+    public void setRecipeImage(String recipeImage) {
         this.recipeImage = recipeImage;
     }
 

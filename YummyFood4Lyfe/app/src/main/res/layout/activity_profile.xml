@@ -51,8 +51,11 @@
             android:id="@+id/profileImage"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/profile_placeholder"
-            android:layout_gravity="center_vertical" />
+            android:src="@drawable/usericon_playstore"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/circle_image"
+            android:clipToOutline="true" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -169,18 +172,26 @@
             android:text="Reviews" />
     </com.google.android.material.tabs.TabLayout>
 
-    <FrameLayout
-        android:id="@+id/profileFrameLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginTop="20dp"
-            android:id="@+id/recyclerViewRecipes"
+        <TextView
+            android:id="@+id/noEntryText"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical" />
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:padding="10dp"
+            android:text="No Recipes yet"
+            android:textAlignment="center"
+            android:textSize="15sp"
+            android:visibility="gone" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewRecipes"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingTop="10dp"
+        android:scrollbars="vertical">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewReviews"
@@ -188,8 +199,6 @@
             android:layout_height="match_parent"
             android:scrollbars="vertical"
             android:visibility="gone" />
-    </FrameLayout>
-
 
     <View
         android:layout_width="match_parent"

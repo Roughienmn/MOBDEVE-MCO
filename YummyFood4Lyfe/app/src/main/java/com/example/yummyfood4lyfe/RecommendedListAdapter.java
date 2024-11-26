@@ -3,10 +3,14 @@ package com.example.yummyfood4lyfe;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +55,14 @@ public class RecommendedListAdapter extends RecyclerView.Adapter<RecommendedList
         holder.recipeName.setText(recipe.getTitle());
         holder.recipeAuthor.setText("By " + recipe.getUsername());
         holder.recipeTime.setText(recipe.getCookingTime());
+        String recipeImgString = recipe.getRecipeImage();
+        if(recipeImgString != null && !recipeImgString.isEmpty()) {
+            Bitmap recipeImage = decodeBase64ToImage(recipeImgString);
+            holder.recommended_img.setImageBitmap(recipeImage);
+        }
+        else{
+            holder.recommended_img.setImageResource(R.drawable.usericon_playstore);
+        }
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, RecipeActivity.class);
@@ -60,6 +72,7 @@ public class RecommendedListAdapter extends RecyclerView.Adapter<RecommendedList
             intent.putExtra("ingredients", recipe.getIngredients());
             intent.putExtra("instructions", recipe.getInstructions());
             intent.putExtra("recipeid", recipe.getRecipeid());
+            intent.putExtra("recipeimage", recipe.getRecipeImage());
             context.startActivity(intent);
         });
         holder.commentButton.setOnClickListener(v -> {
@@ -120,6 +133,7 @@ public class RecommendedListAdapter extends RecyclerView.Adapter<RecommendedList
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView recipeName, recipeAuthor, recipeTime;
         ImageButton commentButton, favoriteButton;
+        ImageView recommended_img;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -128,6 +142,18 @@ public class RecommendedListAdapter extends RecyclerView.Adapter<RecommendedList
             recipeAuthor = itemView.findViewById(R.id.recipeAuthor);
             recipeTime = itemView.findViewById(R.id.recipeTime);
             favoriteButton = itemView.findViewById(R.id.favoriteButton);
+            recommended_img = itemView.findViewById(R.id.recommended_img);
+        }
+    }
+
+    private Bitmap decodeBase64ToImage(String encodedImage) {
+        if(encodedImage.isEmpty() || encodedImage == null) return null;
+        try {
+            byte[] decodedBytes = Base64.decode(encodedImage, Base64.DEFAULT);
+            return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

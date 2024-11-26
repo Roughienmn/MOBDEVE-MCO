@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,7 +37,7 @@ public class CommentActivity extends AppCompatActivity {
     private FirebaseDBHelper firebaseDB;
     private EditText newCommentText;
     private Button sendCommentButton;
-
+    private TextView noCommentsText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,7 @@ public class CommentActivity extends AppCompatActivity {
         commentRecyclerView.setAdapter(commentListAdapter);
         newCommentText = findViewById(R.id.newCommentText);
         sendCommentButton = findViewById(R.id.sendCommentButton);
+        noCommentsText = findViewById(R.id.noEntryText);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -73,6 +75,12 @@ public class CommentActivity extends AppCompatActivity {
                 }
                 Collections.reverse(commentList);
                 commentListAdapter.notifyDataSetChanged();
+                if (commentList.isEmpty()) {
+                    noCommentsText.setVisibility(View.VISIBLE);
+                } else {
+                    noCommentsText.setVisibility(View.GONE);
+                }
+
             }
 
             @Override

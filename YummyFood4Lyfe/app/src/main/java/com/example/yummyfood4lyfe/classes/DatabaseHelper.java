@@ -131,7 +131,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String userName = cursor.getString(cursor.getColumnIndexOrThrow("name"));
             int userProfileImage = cursor.getInt(cursor.getColumnIndexOrThrow("profile_image"));
             cursor.close();
-            return new User(userUsername, userEmail, userBirthday, userPassword, userName, userBio, userProfileImage);
+            return null;
+            // return new User(userUsername, userEmail, userBirthday, userPassword, userName, userBio, userProfileImage);
         } else {
             return null;
         }

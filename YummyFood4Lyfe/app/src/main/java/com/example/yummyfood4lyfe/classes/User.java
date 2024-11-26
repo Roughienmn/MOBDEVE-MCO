@@ -8,7 +8,7 @@ public class User
     private String email;
     private String name;
     private String bio;
-    private int profileImage;
+    private String profileImage;
     private String birthday;
 
     public User(){
@@ -23,19 +23,7 @@ public class User
         this.birthday = birthday;
         this.name = null;
         this.bio = null;
-        this.profileImage = 0;
-    }
-
-    //Constructor for getting user info from database
-    public User(String username, String email, String birthday, String password, String name, String bio, int profileImage)
-    {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.birthday = birthday;
-        this.name = name;
-        this.bio = bio;
-        this.profileImage = profileImage;
+        this.profileImage = "";
     }
 
     public String getUserid() {
@@ -86,11 +74,11 @@ public class User
         this.bio = bio;
     }
 
-    public int getProfileImage() {
+    public String getProfileImage() {
         return profileImage;
     }
 
-    public void setProfileImage(int profileImage) {
+    public void setProfileImage(String profileImage) {
         this.profileImage = profileImage;
     }
 

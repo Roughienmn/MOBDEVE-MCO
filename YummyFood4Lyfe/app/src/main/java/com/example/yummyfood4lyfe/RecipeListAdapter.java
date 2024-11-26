@@ -42,7 +42,8 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
         holder.recipeName.setText(recipe.getTitle());
         holder.recipeAuthor.setText("By Placeholder Name");
         holder.recipeTime.setText(recipe.getCookingTime());
-        holder.recipeImage.setImageResource(recipe.getRecipeImage());
+
+        //holder.recipeImage.setImageBitmap(recipe.getRecipeImage());
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, RecipeActivity.class);
