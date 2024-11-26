@@ -1,14 +1,17 @@
 package com.example.yummyfood4lyfe;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.yummyfood4lyfe.activities.CommentActivity;
 import com.example.yummyfood4lyfe.classes.Review;
 
 import java.text.SimpleDateFormat;
@@ -19,10 +22,12 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
 
     private List<Review> reviewList;
     private Context context;
+    private Boolean clickable;
 
-    public CommentListAdapter(List<Review> reviewList, Context context) {
+    public CommentListAdapter(List<Review> reviewList, Context context, Boolean clickable) {
         this.reviewList = reviewList;
         this.context = context;
+        this.clickable = clickable;
     }
 
     @NonNull
@@ -39,21 +44,17 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
         holder.reviewerName.setText(review.getUsername());
         holder.reviewDate.setText(new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(review.getDateCreated()));
         holder.reviewText.setText(review.getReviewText());
+        holder.reviewImage1.setVisibility(View.GONE);
+        holder.reviewImage2.setVisibility(View.GONE);
 
-        /*if (review.getReviewImages() != null && review.getReviewImages().length > 0) {
-            holder.reviewImage1.setVisibility(View.VISIBLE);
-            holder.reviewImage1.setImageResource(review.getReviewImages()[0]);
+        if(clickable){
+            holder.reviewCard.setOnClickListener(v -> {
+                Intent intent = new Intent(context, CommentActivity.class);
+                intent.putExtra("recipeid", review.getRecipeid());
+                context.startActivity(intent);
+            });
+        }
 
-            if (review.getReviewImages().length > 1) {
-                holder.reviewImage2.setVisibility(View.VISIBLE);
-                holder.reviewImage2.setImageResource(review.getReviewImages()[1]);
-            } else {
-                holder.reviewImage2.setVisibility(View.GONE);
-            }
-        } else {*/
-            holder.reviewImage1.setVisibility(View.GONE);
-            holder.reviewImage2.setVisibility(View.GONE);
-        //}
     }
 
     @Override
@@ -64,6 +65,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
     public static class CommentViewHolder extends RecyclerView.ViewHolder {
         public TextView reviewerName, reviewDate, reviewText;
         public ImageView reviewerImage, reviewImage1, reviewImage2;
+        public CardView reviewCard;
 
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -73,6 +75,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
             reviewerImage = itemView.findViewById(R.id.reviewerImage);
             reviewImage1 = itemView.findViewById(R.id.reviewImage1);
             reviewImage2 = itemView.findViewById(R.id.reviewImage2);
+            reviewCard = itemView.findViewById(R.id.reviewCard);
         }
     }
 }

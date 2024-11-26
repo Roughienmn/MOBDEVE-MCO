@@ -47,7 +47,7 @@ public class CommentActivity extends AppCompatActivity {
         firebaseDB = new FirebaseDBHelper();
         commentRecyclerView = findViewById(R.id.commentRecyclerView);
         commentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        commentListAdapter = new CommentListAdapter(commentList, this);
+        commentListAdapter = new CommentListAdapter(commentList, this, false);
         commentRecyclerView.setAdapter(commentListAdapter);
         newCommentText = findViewById(R.id.newCommentText);
         sendCommentButton = findViewById(R.id.sendCommentButton);

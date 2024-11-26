@@ -69,7 +69,7 @@ public class ProfileActivity extends AppCompatActivity {
         recipeListAdapter = new RecommendedListAdapter(this, recipeList);
         recyclerViewRecipes.setAdapter(recipeListAdapter);
 
-        commentListAdapter = new CommentListAdapter(commentList, this);
+        commentListAdapter = new CommentListAdapter(commentList, this, true);
         commentRecyclerView.setAdapter(commentListAdapter);
 
         recyclerViewRecipes.setVisibility(View.VISIBLE);
