@@ -1,20 +1,21 @@
 package com.example.yummyfood4lyfe.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,11 +24,8 @@ import com.example.yummyfood4lyfe.R;
 import com.example.yummyfood4lyfe.RecommendedListAdapter;
 import com.example.yummyfood4lyfe.classes.FirebaseDBHelper;
 import com.example.yummyfood4lyfe.classes.Recipe;
-import com.example.yummyfood4lyfe.RecipeListAdapter;
 import com.example.yummyfood4lyfe.classes.Review;
-import com.example.yummyfood4lyfe.ReviewListAdapter;
 import com.example.yummyfood4lyfe.classes.User;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -37,7 +35,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class ProfileActivity extends AppCompatActivity {
+public class OtherProfileActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewRecipes, commentRecyclerView;
     private CommentListAdapter commentListAdapter;
@@ -53,13 +51,18 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
-
-        SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
-        String username = sharedPreferences.getString("username", null);
-        String userid = sharedPreferences.getString("userid", null);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_other_profile);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
         firebaseDB = new FirebaseDBHelper();
+
+        Intent i = getIntent();
+        String username = i.getStringExtra("username");
 
         profileUsername = findViewById(R.id.profileUsername);
         profileName = findViewById(R.id.profileName);
@@ -84,14 +87,52 @@ public class ProfileActivity extends AppCompatActivity {
         recyclerViewRecipes.setVisibility(View.VISIBLE);
         commentRecyclerView.setVisibility(View.GONE);
 
-        ImageView settingsButton = findViewById(R.id.settingsButton);
+        firebaseDB.getUserByUsername(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                        user = userSnapshot.getValue(User.class);
+                        if (user != null) {
+                            profileUsername.setText("@" + user.getUsername());
+                            String userName = user.getName();
+                            String userBio = user.getBio();
+                            String profileImageString = user.getProfileImage();
 
-        settingsButton.setOnClickListener(v -> {
-            PopupMenu popupMenu = new PopupMenu(ProfileActivity.this, v);
-            popupMenu.getMenuInflater().inflate(R.menu.profile_dropdown, popupMenu.getMenu());
+                            if(userName != null && !userName.isEmpty()) {
+                                profileName.setText(userName);
+                            } else {
+                                profileName.setVisibility(View.GONE);
+                                profileUsername.setTextSize(20);
+                                profileUsername.setTypeface(ResourcesCompat.getFont(OtherProfileActivity.this, R.font.poppins_semibold));
+                                profileUsername.setTextColor(getResources().getColor(R.color.black));
+                            }
 
-            popupMenu.setOnMenuItemClickListener(item -> handleDropdownClick(item));
-            popupMenu.show();
+                            if(userBio != null && !userBio.isEmpty()) {
+                                profileBio.setText(userBio);
+                            } else {
+                                profileBio.setText("No Bio.");
+                            }
+
+                            if(profileImageString != null && !profileImageString.isEmpty()) {
+                                Bitmap decodedImage = decodeBase64ToImage(profileImageString);
+                                profileImage.setImageBitmap(decodedImage);
+                            }
+                            else{
+                                profileImage.setImageResource(R.drawable.usericon_playstore);
+                            }
+                        }
+                    }
+
+                } else {
+                    Toast.makeText(OtherProfileActivity.this, "User not found", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(OtherProfileActivity.this, "Error fetching user: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
 
         firebaseDB.getRecipesByUsername(username).addValueEventListener(new ValueEventListener() {
@@ -117,7 +158,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(ProfileActivity.this, "Error fetching recipes: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(OtherProfileActivity.this, "Error fetching recipes: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -141,54 +182,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(ProfileActivity.this, "Error fetching reviews: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        firebaseDB.getUserByUsername(username).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                        user = userSnapshot.getValue(User.class);
-                        if (user != null) {
-                            profileUsername.setText("@" + user.getUsername());
-                            String userName = user.getName();
-                            String userBio = user.getBio();
-                            String profileImageString = user.getProfileImage();
-
-                            if(userName != null && !userName.isEmpty()) {
-                                profileName.setText(userName);
-                            } else {
-                                profileName.setVisibility(View.GONE);
-                                profileUsername.setTextSize(20);
-                                profileUsername.setTypeface(ResourcesCompat.getFont(ProfileActivity.this, R.font.poppins_semibold));
-                                profileUsername.setTextColor(getResources().getColor(R.color.black));
-                            }
-
-                            if(userBio != null && !userBio.isEmpty()) {
-                                profileBio.setText(userBio);
-                            } else {
-                                profileBio.setText("No Bio.");
-                            }
-
-                            if(profileImageString != null && !profileImageString.isEmpty()) {
-                                Bitmap decodedImage = decodeBase64ToImage(profileImageString);
-                                profileImage.setImageBitmap(decodedImage);
-                            }
-                            else{
-                                profileImage.setImageResource(R.drawable.usericon_playstore);
-                            }
-                        }
-                    }
-                } else {
-                    Toast.makeText(ProfileActivity.this, "User not found", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(ProfileActivity.this, "Error fetching user: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(OtherProfileActivity.this, "Error fetching reviews: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -224,59 +218,6 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {}
         });
-
-        // nav menu
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setSelectedItemId(R.id.profile);
-
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.home) {
-                Intent intent = new Intent(ProfileActivity.this, HomePageActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
-                finish();
-                return true;
-            } else if (itemId == R.id.profile) {
-                return true;
-            } else if (itemId == R.id.saved_recipes) {
-                Intent intent = new Intent(ProfileActivity.this, SavedRecipeActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
-                finish();
-                return true;
-            } else if (itemId == R.id.add_recipe) {
-                Intent intent = new Intent(ProfileActivity.this, AddRecipeActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
-                finish();
-                return true;
-            }
-            return false;
-        });
-    }
-
-    private boolean handleDropdownClick(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.edit_profile) {
-            Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
-            startActivity(intent);
-            return true;
-        } else if (id == R.id.logout) {
-            Intent intent = new Intent(ProfileActivity.this, SplashScreenActivity.class);
-            startActivity(intent);
-            SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.clear();
-            editor.apply();
-
-            finish();
-            return true;
-        }
-        return false;
     }
 
     private Bitmap decodeBase64ToImage(String encodedImage) {
@@ -288,12 +229,5 @@ public class ProfileActivity extends AppCompatActivity {
             e.printStackTrace();
             return null;
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setSelectedItemId(R.id.profile);
     }
 }

@@ -2,20 +2,28 @@ package com.example.yummyfood4lyfe;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.yummyfood4lyfe.activities.CommentActivity;
+import com.example.yummyfood4lyfe.activities.OtherProfileActivity;
 import com.example.yummyfood4lyfe.activities.RecipeActivity;
 import com.example.yummyfood4lyfe.classes.FirebaseDBHelper;
 import com.example.yummyfood4lyfe.classes.Recipe;
 import com.example.yummyfood4lyfe.classes.Review;
+import com.example.yummyfood4lyfe.classes.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -51,6 +59,39 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
 
         holder.reviewDate.setText(new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(review.getDateCreated()));
         holder.reviewText.setText(review.getReviewText());
+
+        holder.userLayout.setOnClickListener(v -> {
+            Intent intent = new Intent(context, OtherProfileActivity.class);
+            intent.putExtra("username", review.getUsername());
+            context.startActivity(intent);
+        });
+
+        firebaseDB.getUserByUsername(review.getUsername()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                        User user = userSnapshot.getValue(User.class);
+                        if (user != null) {
+                            String profileImageString = user.getProfileImage();
+
+                            if(profileImageString != null && !profileImageString.isEmpty()) {
+                                Bitmap decodedImage = decodeBase64ToImage(profileImageString);
+                                holder.reviewerImage.setImageBitmap(decodedImage);
+                            }
+                            else{
+                                holder.reviewerImage.setImageResource(R.drawable.usericon_playstore);
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
 
         if(clickable){
             firebaseDB.getRecipeById(review.getRecipeid()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -118,6 +159,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
         public TextView reviewerName, reviewDate, reviewText;
         public ImageView reviewerImage, reviewImage1, reviewImage2;
         public CardView reviewCard;
+        public LinearLayout userLayout;
 
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -126,6 +168,18 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
             reviewText = itemView.findViewById(R.id.reviewText);
             reviewerImage = itemView.findViewById(R.id.reviewerImage);
             reviewCard = itemView.findViewById(R.id.reviewCard);
+            userLayout = itemView.findViewById(R.id.userLayout);
+        }
+    }
+
+    private Bitmap decodeBase64ToImage(String encodedImage) {
+        if(encodedImage.isEmpty() || encodedImage == null) return null;
+        try {
+            byte[] decodedBytes = Base64.decode(encodedImage, Base64.DEFAULT);
+            return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

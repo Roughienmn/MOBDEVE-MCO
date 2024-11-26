@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.yummyfood4lyfe.activities.CommentActivity;
+import com.example.yummyfood4lyfe.activities.OtherProfileActivity;
 import com.example.yummyfood4lyfe.activities.RecipeActivity;
 import com.example.yummyfood4lyfe.classes.FirebaseDBHelper;
 import com.example.yummyfood4lyfe.classes.Recipe;
@@ -122,6 +123,12 @@ public class RecommendedListAdapter extends RecyclerView.Adapter<RecommendedList
                     Toast.makeText(context, "Error toggling recipe saved status: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
+        });
+
+        holder.recipeAuthor.setOnClickListener(v -> {
+            Intent intent = new Intent(context, OtherProfileActivity.class);
+            intent.putExtra("username", recipe.getUsername());
+            context.startActivity(intent);
         });
     }
 

@@ -144,6 +144,10 @@ public class FirebaseDBHelper {
         return userRef.orderByChild("userid").equalTo(userId);
     }
 
+    public Query getUserByUsername(String username) {
+        return userRef.orderByChild("username").equalTo(username);
+    }
+
     public void insertSavedRecipe(String userId, String recipeId, OnDBOperationListener<Void> listener) {
         savedRef.child(userId).child(recipeId).setValue(true)
                 .addOnSuccessListener(aVoid -> listener.onSuccess(null))
