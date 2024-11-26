@@ -7,17 +7,16 @@ public class Review {
     private String reviewid;
     private String recipeid;
 
-    private String userId;
+    private String username;
     private String reviewText;
     private Date dateCreated;
 
     public Review(){
     }
 
-    public Review(String reviewid, String recipeid, String userId, String reviewText){
-        this.reviewid = reviewid;
+    public Review(String recipeid, String username, String reviewText){
         this.recipeid = recipeid;
-        this.userId = userId;
+        this.username = username;
         this.reviewText = reviewText;
         this.dateCreated = new Date();
     }
@@ -38,12 +37,12 @@ public class Review {
         this.recipeid = recipeid;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUsername(String userId) {
+        this.username = userId;
     }
 
     public String getReviewText() {

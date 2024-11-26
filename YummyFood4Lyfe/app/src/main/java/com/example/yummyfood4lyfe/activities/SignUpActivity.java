@@ -69,10 +69,10 @@ public class SignUpActivity extends AppCompatActivity {
         User newUser = new User(usernameText, emailText, birthdayText, passwordText);
 
         //Go to homepage if successful creation of user
-        firebaseDB.insertUser(newUser, new FirebaseDBHelper.OnDBOperationListener<Void>() {
+        firebaseDB.insertUser(newUser, new FirebaseDBHelper.OnDBOperationListener<String>() {
             @Override
-            public void onSuccess(Void result) {
-                saveLoginState(usernameText, passwordText);
+            public void onSuccess(String userId) {
+                saveLoginState(usernameText, passwordText, userId);
                 Toast.makeText(SignUpActivity.this, "Welcome!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(SignUpActivity.this, HomePageActivity.class);
                 startActivity(intent);
@@ -119,12 +119,13 @@ public class SignUpActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    private void saveLoginState(String username, String password){
+    private void saveLoginState(String username, String password, String userId) {
         SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("isLoggedIn", true);
         editor.putString("username", username);
         editor.putString("password", password);
+        editor.putString("userid", userId);
         editor.apply();
     }
 }

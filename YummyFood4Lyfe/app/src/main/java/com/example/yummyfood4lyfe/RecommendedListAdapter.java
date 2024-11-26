@@ -52,6 +52,7 @@ public class RecommendedListAdapter extends RecyclerView.Adapter<RecommendedList
         });
         holder.commentButton.setOnClickListener(v -> {
             Intent intent = new Intent(context, CommentActivity.class);
+            intent.putExtra("recipeid", recipe.getRecipeid());
             context.startActivity(intent);
         });
     }

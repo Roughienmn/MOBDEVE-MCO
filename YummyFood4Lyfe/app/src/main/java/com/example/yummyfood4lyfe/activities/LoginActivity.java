@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.yummyfood4lyfe.R;
 import com.example.yummyfood4lyfe.classes.DatabaseHelper;
 import com.example.yummyfood4lyfe.classes.FirebaseDBHelper;
+import com.example.yummyfood4lyfe.classes.User;
 
 public class LoginActivity extends AppCompatActivity {
     Button signInButton;
@@ -50,11 +51,11 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        firebaseDB.checkLogin(usernameText, passwordText, new FirebaseDBHelper.OnDBOperationListener<Boolean>() {
+        firebaseDB.checkLogin(usernameText, passwordText, new FirebaseDBHelper.OnDBOperationListener<User>() {
             @Override
-            public void onSuccess(Boolean result) {
-                if (result) {
-                    saveLoginState(usernameText, passwordText);
+            public void onSuccess(User user) {
+                if (user != null) {
+                    saveLoginState(usernameText, passwordText, user.getUserid());
                     Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
                     startActivity(intent);
                     finish();
@@ -76,12 +77,13 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-    private void saveLoginState(String username, String password) {
+    private void saveLoginState(String username, String password, String userid) {
         SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("isLoggedIn", true);
         editor.putString("username", username);
         editor.putString("password", password);
+        editor.putString("userid", userid);
         editor.apply();
     }
 }

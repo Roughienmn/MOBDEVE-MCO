@@ -4,6 +4,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class FirebaseDBHelper {
         reviewRef = database.getReference(MyFirestoreReferences.REVIEWS_COLLECTION);
     }
 
-    public void insertUser(User user, OnDBOperationListener<Void> listener) {
+    public void insertUser(User user, OnDBOperationListener<String> listener) {
         checkUserExists(user.getUsername(), user.getEmail(), new OnDBOperationListener<String>() {
             @Override
             public void onSuccess(String exists) {
@@ -32,7 +33,7 @@ public class FirebaseDBHelper {
                     user.setUserid(userId);
 
                     userRef.child(userId).setValue(user)
-                            .addOnSuccessListener(aVoid -> listener.onSuccess(null))
+                            .addOnSuccessListener(aVoid -> listener.onSuccess(userId))
                             .addOnFailureListener(listener::onFailure);
                 }
             }
@@ -78,28 +79,28 @@ public class FirebaseDBHelper {
                 });
     }
 
-    public void checkLogin(String username, String password, OnDBOperationListener<Boolean> listener) {
-    userRef.orderByChild("username").equalTo(username)
-        .addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                        User user = userSnapshot.getValue(User.class);
-                        if (user != null && user.getPassword().equals(password)) {
-                            listener.onSuccess(true);
-                            return;
+    public void checkLogin(String username, String password, OnDBOperationListener<User> listener) {
+        userRef.orderByChild("username").equalTo(username)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                                User user = userSnapshot.getValue(User.class);
+                                if (user != null && user.getPassword().equals(password)) {
+                                    listener.onSuccess(user);
+                                    return;
+                                }
+                            }
                         }
+                        listener.onSuccess(null);
                     }
-                }
-                listener.onSuccess(false);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                listener.onFailure(databaseError.toException());
-            }
-        });
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        listener.onFailure(databaseError.toException());
+                    }
+                });
     }
 
     public void insertRecipe(Recipe recipe, OnDBOperationListener<Void> listener) {
@@ -132,6 +133,18 @@ public class FirebaseDBHelper {
                         listener.onFailure(databaseError.toException());
                     }
                 });
+    }
+
+    public void insertReview(Review review, OnDBOperationListener<Void> listener) {
+        String reviewId = reviewRef.push().getKey();
+        review.setReviewid(reviewId);
+        reviewRef.child(reviewId).setValue(review)
+                .addOnSuccessListener(aVoid -> listener.onSuccess(null))
+                .addOnFailureListener(listener::onFailure);
+    }
+
+    public Query getReviewsForRecipe(String recipeId) {
+        return reviewRef.orderByChild("recipeid").equalTo(recipeId);
     }
 
     public interface OnDBOperationListener<T>{
