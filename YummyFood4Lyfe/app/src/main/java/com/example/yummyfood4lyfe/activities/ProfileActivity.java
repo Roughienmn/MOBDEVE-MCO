@@ -252,8 +252,13 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(intent);
             return true;
         } else if (id == R.id.logout) {
-            Intent intent = new Intent(ProfileActivity.this, SignUpActivity.class);
+            Intent intent = new Intent(ProfileActivity.this, SplashScreenActivity.class);
             startActivity(intent);
+            SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.apply();
+
             finish();
             return true;
         }

@@ -40,7 +40,7 @@
                 android:layout_height="125dp"
                 android:src="@drawable/profile_placeholder"
                 android:scaleType="centerCrop"
-                android:background="@drawable/circle_background"
+                android:background="@drawable/circle_background2"
                 android:contentDescription="Profile Picture" />
 
             <ImageView
