@@ -3,7 +3,10 @@ package com.example.yummyfood4lyfe.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,6 +78,16 @@ public class ProfileActivity extends AppCompatActivity {
 
         recyclerViewRecipes.setVisibility(View.VISIBLE);
         commentRecyclerView.setVisibility(View.GONE);
+
+        ImageView settingsButton = findViewById(R.id.settingsButton);
+
+        settingsButton.setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(ProfileActivity.this, v);
+            popupMenu.getMenuInflater().inflate(R.menu.profile_dropdown, popupMenu.getMenu());
+
+            popupMenu.setOnMenuItemClickListener(item -> handleDropdownClick(item));
+            popupMenu.show();
+        });
 
         firebaseDB.getRecipesByUsername(username).addValueEventListener(new ValueEventListener() {
             @Override
@@ -230,6 +243,21 @@ public class ProfileActivity extends AppCompatActivity {
             }
             return false;
         });
+    }
+
+    private boolean handleDropdownClick(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.edit_profile) {
+            Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.logout) {
+            Intent intent = new Intent(ProfileActivity.this, SignUpActivity.class);
+            startActivity(intent);
+            finish();
+            return true;
+        }
+        return false;
     }
 
     @Override
