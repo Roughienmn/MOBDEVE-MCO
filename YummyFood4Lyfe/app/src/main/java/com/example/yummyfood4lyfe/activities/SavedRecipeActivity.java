@@ -34,8 +34,8 @@ public class SavedRecipeActivity extends AppCompatActivity {
         recyclerViewSavedRecipes.setLayoutManager(new LinearLayoutManager(this));
 
         savedRecipes = new ArrayList<>();
-        savedRecipes.add(new Recipe("Classic Chicken Adobo", "Rafael Gamboa", "1 Hour", R.drawable.chicken_adobo_sample));
-        savedRecipes.add(new Recipe("Classic Chicken Adobo", "Rafael Gamboa", "30 Minutes", R.drawable.chicken_adobo_sample));
+        //savedRecipes.add(new Recipe("Classic Chicken Adobo", "Rafael Gamboa", "1 Hour", R.drawable.chicken_adobo_sample));
+        //savedRecipes.add(new Recipe("Classic Chicken Adobo", "Rafael Gamboa", "30 Minutes", R.drawable.chicken_adobo_sample));
 
         adapter = new RecipeListAdapter(savedRecipes, this);
         recyclerViewSavedRecipes.setAdapter(adapter);

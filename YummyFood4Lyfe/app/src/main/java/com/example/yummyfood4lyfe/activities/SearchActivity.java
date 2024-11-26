@@ -50,9 +50,9 @@ public class SearchActivity extends AppCompatActivity {
 
         rcview.setLayoutManager(new LinearLayoutManager(this));
 
-        List<String> dataList = Arrays.asList("Classic Chicken Adobo", "Another Recipe", "More Recipes"); //TODO ADD MORE
-        RecommendedListAdapter adapter = new RecommendedListAdapter(this, dataList);
-        rcview.setAdapter(adapter);
+        //List<String> dataList = Arrays.asList("Classic Chicken Adobo", "Another Recipe", "More Recipes"); //TODO ADD MORE
+        //RecommendedListAdapter adapter = new RecommendedListAdapter(this, dataList);
+        //rcview.setAdapter(adapter);
 
      // Get database
 

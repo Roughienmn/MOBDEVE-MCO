@@ -38,14 +38,14 @@ public class ProfileActivity extends AppCompatActivity {
         recyclerViewRecipes.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewReviews.setLayoutManager(new LinearLayoutManager(this));
 
-        recipeList.add(new Recipe("Classic Chicken Adobo", "Rafael Gamboa", "1 Hour", R.drawable.chicken_adobo_sample));
-        recipeList.add(new Recipe("Classic Chicken Adobo", "Rafael Gamboa", "30 Minutes", R.drawable.chicken_adobo_sample));
+        //recipeList.add(new Recipe("Classic Chicken Adobo", "Rafael Gamboa", "1 Hour", R.drawable.chicken_adobo_sample));
+        //recipeList.add(new Recipe("Classic Chicken Adobo", "Rafael Gamboa", "30 Minutes", R.drawable.chicken_adobo_sample));
         recipeListAdapter = new RecipeListAdapter(recipeList, this);
         recyclerViewRecipes.setAdapter(recipeListAdapter);
 
-        reviewList.add(new Review("Raffy Gamboa", "2 minutes ago", "This sucks.", R.drawable.profile_placeholder, new int[]{}));
-        reviewList.add(new Review("Raffy Gamboa", "11 months ago", "Great recipe!", R.drawable.profile_placeholder, new int[]{R.drawable.chicken_adobo_sample}));
-        reviewList.add(new Review("Raffy Gamboa", "1 year ago", "Loved it!", R.drawable.profile_placeholder, new int[]{R.drawable.chicken_adobo_sample, R.drawable.chicken_adobo_sample}));
+        //reviewList.add(new Review("Raffy Gamboa", "2 minutes ago", "This sucks.", R.drawable.profile_placeholder, new int[]{}));
+        //reviewList.add(new Review("Raffy Gamboa", "11 months ago", "Great recipe!", R.drawable.profile_placeholder, new int[]{R.drawable.chicken_adobo_sample}));
+        //reviewList.add(new Review("Raffy Gamboa", "1 year ago", "Loved it!", R.drawable.profile_placeholder, new int[]{R.drawable.chicken_adobo_sample, R.drawable.chicken_adobo_sample}));
         reviewListAdapter = new ReviewListAdapter(reviewList, this);
         recyclerViewReviews.setAdapter(reviewListAdapter);
 

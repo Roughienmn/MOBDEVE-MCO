@@ -12,17 +12,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.yummyfood4lyfe.activities.CommentActivity;
 import com.example.yummyfood4lyfe.activities.SavedRecipeActivity;
+import com.example.yummyfood4lyfe.classes.Recipe;
 
 import java.util.List;
 
 public class RecommendedListAdapter extends RecyclerView.Adapter<RecommendedListAdapter.ViewHolder> {
 
-    private List<String> dataList;
+    private List<Recipe> recipeList;
     private Context context;
 
-    public RecommendedListAdapter(Context context, List<String> dataList) {
+    public RecommendedListAdapter(Context context, List<Recipe> recipeList) {
         this.context = context;
-        this.dataList = dataList;
+        this.recipeList = recipeList;
     }
 
     @NonNull
@@ -34,10 +35,18 @@ public class RecommendedListAdapter extends RecyclerView.Adapter<RecommendedList
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String data = dataList.get(position);
-        holder.textView.setText(data);
+        Recipe recipe = recipeList.get(position);
+        holder.recipeName.setText(recipe.getTitle());
+        holder.recipeAuthor.setText("By " + recipe.getUsername());
+        holder.recipeTime.setText(recipe.getCookingTime());
+
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, SavedRecipeActivity.RecipeActivity.class);
+            intent.putExtra("username", recipe.getUsername());
+            intent.putExtra("title", recipe.getTitle());
+            intent.putExtra("cookingTime", recipe.getCookingTime());
+            intent.putExtra("ingredients", recipe.getIngredients());
+            intent.putExtra("instructions", recipe.getInstructions());
             context.startActivity(intent);
         });
         holder.commentButton.setOnClickListener(v -> {
@@ -48,17 +57,19 @@ public class RecommendedListAdapter extends RecyclerView.Adapter<RecommendedList
 
     @Override
     public int getItemCount() {
-        return dataList.size();
+        return recipeList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textView;
+        TextView recipeName, recipeAuthor, recipeTime;
         ImageButton commentButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             commentButton = itemView.findViewById(R.id.commentButton);
-            textView = itemView.findViewById(R.id.recipeName); // Adjust this ID based on your layout
+            recipeName = itemView.findViewById(R.id.recipeName);
+            recipeAuthor = itemView.findViewById(R.id.recipeAuthor);
+            recipeTime = itemView.findViewById(R.id.recipeTime);
         }
     }
 }

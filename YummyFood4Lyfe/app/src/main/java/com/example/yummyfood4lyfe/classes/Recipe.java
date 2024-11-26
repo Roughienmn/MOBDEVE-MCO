@@ -2,44 +2,35 @@ package com.example.yummyfood4lyfe.classes;
 
 public class Recipe {
 
-    private int id;
-    private int userId;
+    private int recipeid;
+    private String username;
     private String title;
     private String cookingTime;
     private int servings;
     private int recipeImage;
     private String ingredients;
     private String instructions;
-
-    // to be removed
-    private String author;
-
-    //old constructor to be removed
-    public Recipe(String title, String author, String cookingTime, int recipeImage) {
-        this.title = title;
-        this.author = author;
-        this.cookingTime = cookingTime;
-        this.recipeImage = recipeImage;
-    }
+    private long timestamp;
 
     public Recipe() {
     }
 
     // constructor for new recipe
-    public Recipe(int userId, String title, String cookingTime, int servings, int recipeImage, String ingredients, String instructions) {
-        this.userId = userId;
+    public Recipe(String username, String title, String cookingTime, int servings, int recipeImage, String ingredients, String instructions) {
+        this.username = username;
         this.title = title;
         this.cookingTime = cookingTime;
         this.servings = servings;
         this.recipeImage = recipeImage;
         this.ingredients = ingredients;
         this.instructions = instructions;
+        this.timestamp = System.currentTimeMillis();
     }
 
     // constructor for getting recipe from database
-    public Recipe(int id, int userId, String title, String cookingTime, int servings, int recipeImage, String ingredients, String instructions) {
-        this.id = id;
-        this.userId = userId;
+    public Recipe(int recipeid, String username, String title, String cookingTime, int servings, int recipeImage, String ingredients, String instructions) {
+        this.recipeid = recipeid;
+        this.username = username;
         this.title = title;
         this.cookingTime = cookingTime;
         this.servings = servings;
@@ -48,20 +39,20 @@ public class Recipe {
         this.instructions = instructions;
     }
 
-    public int getId() {
-        return id;
+    public int getRecipeid() {
+        return recipeid;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setRecipeid(int recipeid) {
+        this.recipeid = recipeid;
     }
 
-    public int getUserId() {
-        return userId;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getTitle() {
@@ -112,11 +103,11 @@ public class Recipe {
         this.instructions = instructions;
     }
 
-    public String getAuthor() {
-        return author;
+    public long getTimestamp() {
+        return timestamp;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 }

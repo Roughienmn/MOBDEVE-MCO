@@ -147,7 +147,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public long insertRecipe(Recipe recipe) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("user_id", recipe.getUserId());
+        contentValues.put("username", recipe.getUsername());
         contentValues.put("title", recipe.getTitle());
         contentValues.put("time", recipe.getCookingTime());
         contentValues.put("servings", recipe.getServings());

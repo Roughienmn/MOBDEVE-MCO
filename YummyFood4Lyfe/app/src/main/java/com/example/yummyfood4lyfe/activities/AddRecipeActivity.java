@@ -12,17 +12,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.yummyfood4lyfe.R;
 import com.example.yummyfood4lyfe.classes.DatabaseHelper;
+import com.example.yummyfood4lyfe.classes.FirebaseDBHelper;
 import com.example.yummyfood4lyfe.classes.Recipe;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class AddRecipeActivity extends AppCompatActivity {
     Button publishButton;
     EditText title, cookingTime, servings, ingredients, instructions;
-    DatabaseHelper db;
+    FirebaseDBHelper firebaseDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        db = new DatabaseHelper(this);
+        firebaseDB = new FirebaseDBHelper();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
@@ -91,7 +92,7 @@ public class AddRecipeActivity extends AppCompatActivity {
             return;
         }
 
-        int userid = sharedPreferences.getInt("userid", -1);
+        String username = sharedPreferences.getString("username", null);
         String titleText = title.getText().toString();
         String cookingTimeText = cookingTime.getText().toString();
         int servingsInt = Integer.parseInt(servings.getText().toString());
@@ -99,9 +100,19 @@ public class AddRecipeActivity extends AppCompatActivity {
         String ingredientsText = ingredients.getText().toString();
         String instructionsText = instructions.getText().toString();
 
-        Recipe newRecipe = new Recipe(userid, titleText, cookingTimeText, servingsInt, recipeImage, ingredientsText, instructionsText);
+        Recipe newRecipe = new Recipe(username, titleText, cookingTimeText, servingsInt, recipeImage, ingredientsText, instructionsText);
 
-        db.insertRecipe(newRecipe);
+        firebaseDB.insertRecipe(newRecipe, new FirebaseDBHelper.OnDBOperationListener<Void>() {
+            @Override
+            public void onSuccess(Void result) {
+                Toast.makeText(AddRecipeActivity.this, "Recipe added successfully", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(AddRecipeActivity.this, "Error adding recipe: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
         Intent intent = new Intent(AddRecipeActivity.this, ConfirmAddActivity.class);
         startActivity(intent);

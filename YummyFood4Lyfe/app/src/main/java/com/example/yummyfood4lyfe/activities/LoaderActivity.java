@@ -20,6 +20,7 @@ public class LoaderActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+
                 if(isLoggedIn){
                     Intent intent = new Intent(LoaderActivity.this, HomePageActivity.class);
                     startActivity(intent);

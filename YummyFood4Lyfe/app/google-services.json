@@ -2,6 +2,7 @@
   "project_info": {
     "project_number": "667394892185",
     "project_id": "yummyfood4lyfe",
+    "firebase_url":"https://yummyfood4lyfe-default-rtdb.asia-southeast1.firebasedatabase.app",
     "storage_bucket": "yummyfood4lyfe.firebasestorage.app"
   },
   "client": [

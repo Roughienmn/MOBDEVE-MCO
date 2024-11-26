@@ -37,12 +37,10 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.Re
     public void onBindViewHolder(@NonNull ReviewViewHolder holder, int position) {
         Review review = reviewList.get(position);
 
-        holder.reviewerName.setText(review.getReviewerName());
+        /*holder.reviewerName.setText(review.getReviewerName());
         holder.reviewDate.setText(review.getReviewDate());
         holder.reviewText.setText(review.getReviewText());
         holder.reviewerImage.setImageResource(review.getReviewerImage());
-
-        int[] reviewImages = review.getReviewImages();
 
         if (reviewImages != null && reviewImages.length > 0) {
             holder.reviewImage1.setVisibility(View.VISIBLE);
@@ -58,7 +56,7 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.Re
             holder.reviewImage1.setVisibility(View.GONE);
             holder.reviewImage2.setVisibility(View.GONE);
         }
-
+        */
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, CommentActivity.class);
             context.startActivity(intent);

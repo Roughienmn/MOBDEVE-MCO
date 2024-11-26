@@ -2,7 +2,7 @@ package com.example.yummyfood4lyfe.classes;
 
 public class User
 {
-    private int id;
+    private int userid;
     private String username;
     private String password;
     private String email;
@@ -38,12 +38,12 @@ public class User
         this.profileImage = profileImage;
     }
 
-    public int getId() {
-        return id;
+    public int getUserid() {
+        return userid;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUserid(int userid) {
+        this.userid = userid;
     }
 
     public String getUsername() {

@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.yummyfood4lyfe.R;
+import com.example.yummyfood4lyfe.classes.FirebaseDBHelper;
+import com.example.yummyfood4lyfe.classes.MyFirestoreReferences;
 import com.example.yummyfood4lyfe.classes.User;
 import com.example.yummyfood4lyfe.classes.DatabaseHelper;
 
@@ -24,13 +26,14 @@ public class SignUpActivity extends AppCompatActivity {
     EditText username, email, birthday, password, confirmpassword;
     TextView loginSignupScreen;
     DatabaseHelper db;
+    FirebaseDBHelper firebaseDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        db = new DatabaseHelper(this);
+        firebaseDB = new FirebaseDBHelper();
 
         signUpButton = findViewById(R.id.signUpButton);
         username = findViewById(R.id.username);
@@ -46,46 +49,41 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void onSignUpButtonClick(View v){
+
         String usernameText = username.getText().toString();
         String emailText = email.getText().toString();
         String birthdayText = birthday.getText().toString();
         String passwordText = password.getText().toString();
         String confirmpasswordText = confirmpassword.getText().toString();
 
-        //Check if passwords match
-        if(!passwordText.equals(confirmpasswordText)){
-            Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        //Check if username is already being used
-        if(db.searchExistingUsername(usernameText)){
-            Toast.makeText(this, "Username already exists", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(db.searchExistingEmail(emailText)){
-            Toast.makeText(this, "Email already in use", Toast.LENGTH_SHORT).show();
-            return;
-        }
         //Check if any empty fields
         if(usernameText.isEmpty() || emailText.isEmpty() || birthdayText.isEmpty() || passwordText.isEmpty() || confirmpasswordText.isEmpty()){
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
         }
-
-        User newUser = new User(usernameText, emailText, birthdayText, passwordText);
-        long result = db.insertUser(newUser);
-        if (result == -1){
-            Toast.makeText(this, "Error creating user", Toast.LENGTH_SHORT).show();
+        //Check if passwords match
+        if(!passwordText.equals(confirmpasswordText)){
+            Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
             return;
         }
+        User newUser = new User(usernameText, emailText, birthdayText, passwordText);
 
-        User createdUser = db.getUser(usernameText);
-
-        saveLoginState(createdUser.getUsername(), createdUser.getPassword(), createdUser.getId());
         //Go to homepage if successful creation of user
-        Intent intent = new Intent(SignUpActivity.this, HomePageActivity.class);
-        startActivity(intent);
-        finish();
+        firebaseDB.insertUser(newUser, new FirebaseDBHelper.OnDBOperationListener<Void>() {
+            @Override
+            public void onSuccess(Void result) {
+                saveLoginState(usernameText, passwordText);
+                Toast.makeText(SignUpActivity.this, "Welcome!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(SignUpActivity.this, HomePageActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(SignUpActivity.this, "Error creating user: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void onLoginSignupScreenClick(View v){
@@ -121,13 +119,12 @@ public class SignUpActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    private void saveLoginState(String username, String password, int userId){
+    private void saveLoginState(String username, String password){
         SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("isLoggedIn", true);
         editor.putString("username", username);
         editor.putString("password", password);
-        editor.putInt("userid", userId);
         editor.apply();
     }
 }

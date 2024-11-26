@@ -40,7 +40,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
         // data
         Recipe recipe = recipeList.get(position);
         holder.recipeName.setText(recipe.getTitle());
-        holder.recipeAuthor.setText("By " + recipe.getAuthor());
+        holder.recipeAuthor.setText("By Placeholder Name");
         holder.recipeTime.setText(recipe.getCookingTime());
         holder.recipeImage.setImageResource(recipe.getRecipeImage());
 
