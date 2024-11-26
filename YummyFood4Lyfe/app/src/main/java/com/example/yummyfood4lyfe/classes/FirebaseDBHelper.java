@@ -8,7 +8,9 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FirebaseDBHelper {
     FirebaseDatabase database;
@@ -206,7 +208,16 @@ public class FirebaseDBHelper {
         return recipeRef.child(recipeId);
     }
 
+    public void updateUser(String userid, String name, String bio, String profileImage, OnDBOperationListener<Void> listener) {
+        Map<String, Object> userUpdates = new HashMap<>();
+        userUpdates.put("name", name);
+        userUpdates.put("bio", bio);
+        userUpdates.put("profileImage", profileImage);
 
+        userRef.child(userid).updateChildren(userUpdates)
+                .addOnSuccessListener(aVoid -> listener.onSuccess(null))
+                .addOnFailureListener(listener::onFailure);
+    }
 
     public interface OnDBOperationListener<T>{
         void onSuccess(T result);

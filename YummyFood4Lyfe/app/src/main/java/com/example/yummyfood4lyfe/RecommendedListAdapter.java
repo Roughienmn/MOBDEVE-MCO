@@ -35,12 +35,14 @@ public class RecommendedListAdapter extends RecyclerView.Adapter<RecommendedList
     private FirebaseDBHelper firebaseDB = new FirebaseDBHelper();
     private SharedPreferences sharedPreferences;
     private String userid;
+    private Boolean ownProfile;
 
-    public RecommendedListAdapter(Context context, List<Recipe> recipeList) {
+    public RecommendedListAdapter(Context context, List<Recipe> recipeList, Boolean ownProfile) {
         this.context = context;
         this.recipeList = recipeList;
         this.sharedPreferences = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE);
         this.userid = sharedPreferences.getString("userid", null);
+        this.ownProfile = ownProfile;
     }
 
     @NonNull
@@ -54,7 +56,13 @@ public class RecommendedListAdapter extends RecyclerView.Adapter<RecommendedList
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Recipe recipe = recipeList.get(position);
         holder.recipeName.setText(recipe.getTitle());
-        holder.recipeAuthor.setText("By " + recipe.getUsername());
+        if(ownProfile) {
+            holder.recipeAuthor.setVisibility(View.GONE);
+        }
+        else {
+            holder.recipeAuthor.setVisibility(View.VISIBLE);
+            holder.recipeAuthor.setText("By " + recipe.getUsername());
+        }
         holder.recipeTime.setText(recipe.getCookingTime());
         String recipeImgString = recipe.getRecipeImage();
         if(recipeImgString != null && !recipeImgString.isEmpty()) {

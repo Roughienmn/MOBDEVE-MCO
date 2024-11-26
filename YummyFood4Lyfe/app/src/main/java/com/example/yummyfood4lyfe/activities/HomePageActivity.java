@@ -44,7 +44,7 @@ public class HomePageActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.rcview_recommended);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        RecommendedListAdapter adapter = new RecommendedListAdapter(this, recipeList);
+        RecommendedListAdapter adapter = new RecommendedListAdapter(this, recipeList, false);
         recyclerView.setAdapter(adapter);
 
         firebaseDB.getLatestRecipes(20).addValueEventListener(new ValueEventListener() {

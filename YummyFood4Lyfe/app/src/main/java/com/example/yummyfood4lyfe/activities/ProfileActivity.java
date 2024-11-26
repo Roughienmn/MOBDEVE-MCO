@@ -38,6 +38,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity {
+    private static final int REQUEST_EDIT_PROFILE = 1;
 
     private RecyclerView recyclerViewRecipes, commentRecyclerView;
     private CommentListAdapter commentListAdapter;
@@ -75,7 +76,7 @@ public class ProfileActivity extends AppCompatActivity {
         recyclerViewRecipes.setLayoutManager(new LinearLayoutManager(this));
         commentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        recipeListAdapter = new RecommendedListAdapter(this, recipeList);
+        recipeListAdapter = new RecommendedListAdapter(this, recipeList, true);
         recyclerViewRecipes.setAdapter(recipeListAdapter);
 
         commentListAdapter = new CommentListAdapter(commentList, this, true);
@@ -145,52 +146,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        firebaseDB.getUserByUsername(username).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                        user = userSnapshot.getValue(User.class);
-                        if (user != null) {
-                            profileUsername.setText("@" + user.getUsername());
-                            String userName = user.getName();
-                            String userBio = user.getBio();
-                            String profileImageString = user.getProfileImage();
-
-                            if(userName != null && !userName.isEmpty()) {
-                                profileName.setText(userName);
-                            } else {
-                                profileName.setVisibility(View.GONE);
-                                profileUsername.setTextSize(20);
-                                profileUsername.setTypeface(ResourcesCompat.getFont(ProfileActivity.this, R.font.poppins_semibold));
-                                profileUsername.setTextColor(getResources().getColor(R.color.black));
-                            }
-
-                            if(userBio != null && !userBio.isEmpty()) {
-                                profileBio.setText(userBio);
-                            } else {
-                                profileBio.setText("No Bio.");
-                            }
-
-                            if(profileImageString != null && !profileImageString.isEmpty()) {
-                                Bitmap decodedImage = decodeBase64ToImage(profileImageString);
-                                profileImage.setImageBitmap(decodedImage);
-                            }
-                            else{
-                                profileImage.setImageResource(R.drawable.usericon_playstore);
-                            }
-                        }
-                    }
-                } else {
-                    Toast.makeText(ProfileActivity.this, "User not found", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(ProfileActivity.this, "Error fetching user: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        loadProfileData();
 
         // tab switching
         TabLayout tabLayout = findViewById(R.id.profileTabs);
@@ -263,7 +219,7 @@ public class ProfileActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.edit_profile) {
             Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_EDIT_PROFILE);
             return true;
         } else if (id == R.id.logout) {
             Intent intent = new Intent(ProfileActivity.this, SplashScreenActivity.class);
@@ -277,6 +233,66 @@ public class ProfileActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_EDIT_PROFILE && resultCode == RESULT_OK) {
+            // Refresh the profile data
+            loadProfileData();
+        }
+    }
+
+    private void loadProfileData() {
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+        String username = sharedPreferences.getString("username", null);
+
+        firebaseDB.getUserByUsername(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                        User user = userSnapshot.getValue(User.class);
+                        if (user != null) {
+                            profileUsername.setText("@" + user.getUsername());
+                            String userName = user.getName();
+                            String userBio = user.getBio();
+                            String profileImageString = user.getProfileImage();
+
+                            if(userName != null && !userName.isEmpty()) {
+                                profileName.setText(userName);
+                            } else {
+                                profileName.setVisibility(View.GONE);
+                                profileUsername.setTextSize(20);
+                                profileUsername.setTypeface(ResourcesCompat.getFont(ProfileActivity.this, R.font.poppins_semibold));
+                                profileUsername.setTextColor(getResources().getColor(R.color.black));
+                            }
+
+                            if(userBio != null && !userBio.isEmpty()) {
+                                profileBio.setText(userBio);
+                            } else {
+                                profileBio.setText("No Bio.");
+                            }
+
+                            if(profileImageString != null && !profileImageString.isEmpty()) {
+                                Bitmap decodedImage = decodeBase64ToImage(profileImageString);
+                                profileImage.setImageBitmap(decodedImage);
+                            } else {
+                                profileImage.setImageResource(R.drawable.usericon_playstore);
+                            }
+                        }
+                    }
+                } else {
+                    Toast.makeText(ProfileActivity.this, "User not found", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(ProfileActivity.this, "Error fetching user: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private Bitmap decodeBase64ToImage(String encodedImage) {

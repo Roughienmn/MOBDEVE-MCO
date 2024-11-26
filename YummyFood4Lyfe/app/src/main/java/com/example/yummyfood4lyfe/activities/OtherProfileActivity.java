@@ -78,7 +78,7 @@ public class OtherProfileActivity extends AppCompatActivity {
         recyclerViewRecipes.setLayoutManager(new LinearLayoutManager(this));
         commentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        recipeListAdapter = new RecommendedListAdapter(this, recipeList);
+        recipeListAdapter = new RecommendedListAdapter(this, recipeList, false);
         recyclerViewRecipes.setAdapter(recipeListAdapter);
 
         commentListAdapter = new CommentListAdapter(commentList, this, true);

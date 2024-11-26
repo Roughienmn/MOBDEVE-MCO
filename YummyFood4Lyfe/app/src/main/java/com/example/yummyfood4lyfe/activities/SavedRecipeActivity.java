@@ -49,7 +49,7 @@ public class SavedRecipeActivity extends AppCompatActivity {
         recipeList = new ArrayList<>();
         savedRecipeIds = new ArrayList<>();
 
-        adapter = new RecommendedListAdapter(this, recipeList);
+        adapter = new RecommendedListAdapter(this, recipeList, false);
         recyclerViewSavedRecipes.setAdapter(adapter);
         if (userid != null) {
             firebaseDB.getSavedRecipeIds(userid, new FirebaseDBHelper.OnDBOperationListener<List<String>>() {
