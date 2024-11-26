@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "667394892185",
+    "project_id": "yummyfood4lyfe",
+    "firebase_url":"https://yummyfood4lyfe-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "storage_bucket": "yummyfood4lyfe.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:667394892185:android:62ce51941fa03d78d8f308",
+        "android_client_info": {
+          "package_name": "com.example.yummyfood4lyfe"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApVVyWQe6M1rjdbxjt58O24bXOESSCC4c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
