@@ -1,7 +1,10 @@
 package com.example.yummyfood4lyfe.activities;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -16,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.yummyfood4lyfe.R;
 import com.example.yummyfood4lyfe.classes.FirebaseDBHelper;
@@ -25,6 +30,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.io.ByteArrayOutputStream;
 
 public class AddRecipeActivity extends AppCompatActivity {
+    private static final int REQUEST_CAMERA_PERMISSION = 100;
+    private static final int REQUEST_IMAGE_CAPTURE = 3;
+    private static final int REQUEST_IMAGE_PICK = 2;
+
     Button publishButton;
     EditText title, cookingTime, servings, ingredients, instructions;
     GridLayout imageGrid;
@@ -95,10 +104,43 @@ public class AddRecipeActivity extends AppCompatActivity {
     }
 
     private void onImageUploadClick(View v) {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, 2);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select Image")
+                .setItems(new CharSequence[]{"Choose from Gallery", "Take Photo"}, (dialog, which) -> {
+                    switch (which) {
+                        case 0:
+                            // Choose from gallery
+                            Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            startActivityForResult(galleryIntent, REQUEST_IMAGE_PICK);
+                            break;
+                        case 1:
+                            // Take photo
+                            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+                            } else {
+                                openCamera();
+                            }
+                            break;
+                    }
+                })
+                .show();
+    }
+
+    private void openCamera() {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CAMERA_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openCamera();
+            } else {
+                Toast.makeText(this, "Camera permission is required to take photos", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private void onPublishButtonClick(View v) {
@@ -141,7 +183,7 @@ public class AddRecipeActivity extends AppCompatActivity {
                 servings.setText("");
                 ingredients.setText("");
                 instructions.setText("");
-                imagePlaceholder1.setImageBitmap(null);
+                imagePlaceholder1.setImageResource(R.drawable.dashed_border);
                 cross.setVisibility(View.VISIBLE);
             }
 
@@ -155,29 +197,34 @@ public class AddRecipeActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-            // Handle the result from ConfirmAddActivity if needed
-        }
-        if (requestCode == 2 && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri imageUri = data.getData();
-            if (imageUri != null) {
-                try {
-                    Bitmap selectedImage = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-
-                    imagePlaceholder1.setBackground(null);
-                    imagePlaceholder1.setImageBitmap(selectedImage);
-                    cross.setVisibility(View.GONE);
-
-                    encodedImage = encodeImageToBase64(selectedImage, 3);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else {
-                encodedImage = "";
-                imagePlaceholder1.setImageBitmap(null);
-                cross.setVisibility(View.VISIBLE);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_IMAGE_PICK && data != null && data.getData() != null) {
+                Uri imageUri = data.getData();
+                handleImageResult(imageUri);
+            } else if (requestCode == REQUEST_IMAGE_CAPTURE && data != null && data.getExtras() != null) {
+                Bitmap photo = (Bitmap) data.getExtras().get("data");
+                handleImageResult(photo);
             }
         }
+    }
+
+    private void handleImageResult(Uri imageUri) {
+        try {
+            Bitmap selectedImage = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+            imagePlaceholder1.setBackground(null);
+            imagePlaceholder1.setImageBitmap(selectedImage);
+            cross.setVisibility(View.GONE);
+            encodedImage = encodeImageToBase64(selectedImage, 3);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void handleImageResult(Bitmap photo) {
+        imagePlaceholder1.setBackground(null);
+        imagePlaceholder1.setImageBitmap(photo);
+        cross.setVisibility(View.GONE);
+        encodedImage = encodeImageToBase64(photo, 3);
     }
 
     private String encodeImageToBase64(Bitmap image) { return encodeImageToBase64(image, -1); }
