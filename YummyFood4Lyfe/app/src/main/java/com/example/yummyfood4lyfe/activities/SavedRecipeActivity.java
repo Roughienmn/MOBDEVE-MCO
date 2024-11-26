@@ -3,7 +3,9 @@ package com.example.yummyfood4lyfe.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,11 +30,14 @@ public class SavedRecipeActivity extends AppCompatActivity {
     private List<Recipe> recipeList;
     List<String> savedRecipeIds;
     FirebaseDBHelper firebaseDB;
+    TextView noEntryText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saved);
+
+        noEntryText = findViewById(R.id.noEntryText);
 
         firebaseDB = new FirebaseDBHelper();
         SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
@@ -51,6 +56,13 @@ public class SavedRecipeActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(List<String> result) {
                     savedRecipeIds = result;
+
+                    if (savedRecipeIds.size() == 0) {
+                        noEntryText.setVisibility(View.VISIBLE);
+                    }
+                    else{
+                        noEntryText.setVisibility(View.GONE);
+                    }
                     for (String recipeId: savedRecipeIds) {
                         firebaseDB.getRecipeById(recipeId).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
@@ -123,47 +135,4 @@ public class SavedRecipeActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.saved_recipes);
     }
-/*
-    public static class RecipeActivity extends AppCompatActivity {
-        private ScrollView ingredientsScroll;
-        private ScrollView stepsScroll;
-        private Button ingredientsButton;
-        private Button stepsButton;
-
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_recipe);
-
-            ingredientsScroll = findViewById(R.id.ingredients_scroll);
-            stepsScroll = findViewById(R.id.instructions);
-            ingredientsButton = findViewById(R.id.ingredient_btn);
-            stepsButton = findViewById(R.id.steps_btn);
-
-            ingredientsButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ingredientsScroll.setVisibility(View.VISIBLE);
-                    stepsScroll.setVisibility(View.GONE);
-                    ingredientsButton.setBackgroundResource(R.drawable.button_pressed_background);
-                    ingredientsButton.setTextColor(ContextCompat.getColor(RecipeActivity.this, android.R.color.white));
-                    stepsButton.setBackgroundResource(android.R.color.transparent);
-                    stepsButton.setTextColor(ContextCompat.getColor(RecipeActivity.this, android.R.color.black));
-                }
-            });
-
-            stepsButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ingredientsScroll.setVisibility(View.GONE);
-                    stepsScroll.setVisibility(View.VISIBLE);
-                    stepsButton.setBackgroundResource(R.drawable.button_pressed_background);
-                    stepsButton.setTextColor(ContextCompat.getColor(RecipeActivity.this, android.R.color.white));
-                    ingredientsButton.setBackgroundResource(android.R.color.transparent);
-                    ingredientsButton.setTextColor(ContextCompat.getColor(RecipeActivity.this, android.R.color.black));
-                }
-            });
-        }
-    }
- */
 }

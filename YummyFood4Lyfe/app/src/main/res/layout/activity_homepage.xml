@@ -58,8 +58,8 @@
         android:text="Recommended"
         android:textColor="@color/black"
         android:textSize="18sp"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcview_recommended"
@@ -81,5 +81,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:menu="@menu/bottom_navmenu_for_homescreen" />
+
+    <TextView
+        android:id="@+id/noEntryText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/poppins_medium"
+        android:padding="10dp"
+        android:text="No Recipes yet"
+        android:textAlignment="center"
+        android:textSize="15sp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/recommended_text"
+        tools:layout_editor_absoluteX="0dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

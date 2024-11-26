@@ -3,6 +3,7 @@ package com.example.yummyfood4lyfe.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +28,7 @@ import java.util.List;
 public class HomePageActivity extends AppCompatActivity {
     FirebaseDBHelper firebaseDB;
     List <Recipe> recipeList = new ArrayList<>();
-    TextView userGreeting;
+    TextView userGreeting, noEntryText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         firebaseDB = new FirebaseDBHelper();
@@ -36,6 +37,9 @@ public class HomePageActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
+
+
+        noEntryText = findViewById(R.id.noEntryText);
 
         RecyclerView recyclerView = findViewById(R.id.rcview_recommended);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -53,6 +57,12 @@ public class HomePageActivity extends AppCompatActivity {
                 }
                 Collections.reverse(recipeList);
                 adapter.notifyDataSetChanged();
+
+                if (recipeList.size() == 0) {
+                    noEntryText.setVisibility(View.VISIBLE);
+                } else {
+                    noEntryText.setVisibility(View.GONE);
+                }
             }
 
             @Override
