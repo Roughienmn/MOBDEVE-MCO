@@ -35,7 +35,7 @@
         android:layout_width="270dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins"
-        android:text="What do want to cook today?"
+        android:text="What are you cooking today?"
         android:textColor="@color/white"
         android:textSize="17sp"
         app:layout_constraintStart_toStartOf="@+id/textView2"
