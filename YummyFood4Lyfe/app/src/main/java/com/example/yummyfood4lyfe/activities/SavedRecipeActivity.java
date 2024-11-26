@@ -1,20 +1,22 @@
 package com.example.yummyfood4lyfe.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ScrollView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.yummyfood4lyfe.R;
+import com.example.yummyfood4lyfe.RecommendedListAdapter;
+import com.example.yummyfood4lyfe.classes.FirebaseDBHelper;
 import com.example.yummyfood4lyfe.classes.Recipe;
-import com.example.yummyfood4lyfe.RecipeListAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,23 +24,60 @@ import java.util.List;
 public class SavedRecipeActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewSavedRecipes;
-    private RecipeListAdapter adapter;
-    private List<Recipe> savedRecipes;
+    private RecommendedListAdapter adapter;
+    private List<Recipe> recipeList;
+    List<String> savedRecipeIds;
+    FirebaseDBHelper firebaseDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saved);
 
+        firebaseDB = new FirebaseDBHelper();
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+        String userid = sharedPreferences.getString("userid", null);
+
         recyclerViewSavedRecipes = findViewById(R.id.recyclerViewSavedRecipes);
         recyclerViewSavedRecipes.setLayoutManager(new LinearLayoutManager(this));
 
-        savedRecipes = new ArrayList<>();
-        //savedRecipes.add(new Recipe("Classic Chicken Adobo", "Rafael Gamboa", "1 Hour", R.drawable.chicken_adobo_sample));
-        //savedRecipes.add(new Recipe("Classic Chicken Adobo", "Rafael Gamboa", "30 Minutes", R.drawable.chicken_adobo_sample));
+        recipeList = new ArrayList<>();
+        savedRecipeIds = new ArrayList<>();
 
-        adapter = new RecipeListAdapter(savedRecipes, this);
+        adapter = new RecommendedListAdapter(this, recipeList);
         recyclerViewSavedRecipes.setAdapter(adapter);
+        if (userid != null) {
+            firebaseDB.getSavedRecipeIds(userid, new FirebaseDBHelper.OnDBOperationListener<List<String>>() {
+                @Override
+                public void onSuccess(List<String> result) {
+                    savedRecipeIds = result;
+                    for (String recipeId: savedRecipeIds) {
+                        firebaseDB.getRecipeById(recipeId).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                Recipe recipe = dataSnapshot.getValue(Recipe.class);
+                                if (recipe != null) {
+                                    recipeList.add(recipe);
+                                    adapter.notifyDataSetChanged();
+                                }
+                                else{
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                // Handle the error
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+
+                }
+            });
+        }
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 

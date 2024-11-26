@@ -59,6 +59,7 @@ public class RecommendedListAdapter extends RecyclerView.Adapter<RecommendedList
             intent.putExtra("cookingTime", recipe.getCookingTime());
             intent.putExtra("ingredients", recipe.getIngredients());
             intent.putExtra("instructions", recipe.getInstructions());
+            intent.putExtra("recipeid", recipe.getRecipeid());
             context.startActivity(intent);
         });
         holder.commentButton.setOnClickListener(v -> {
@@ -73,9 +74,11 @@ public class RecommendedListAdapter extends RecyclerView.Adapter<RecommendedList
                 if (dataSnapshot.exists()) {
                     holder.favoriteButton.setImageResource(R.drawable.bookmark_saved); // Set to saved icon
                     holder.favoriteButton.setTag("saved");
+                    holder.favoriteButton.setColorFilter(context.getResources().getColor(R.color.green));
                 } else {
                     holder.favoriteButton.setImageResource(R.drawable.bookmark_notsaved); // Set to unsaved icon
                     holder.favoriteButton.setTag("unsaved");
+                    holder.favoriteButton.clearColorFilter();
                 }
             }
 
@@ -92,11 +95,12 @@ public class RecommendedListAdapter extends RecyclerView.Adapter<RecommendedList
                     if ("saved".equals(holder.favoriteButton.getTag())) {
                         holder.favoriteButton.setImageResource(R.drawable.bookmark_notsaved); // Set to unsaved icon
                         holder.favoriteButton.setTag("unsaved");
-                        Toast.makeText(context, "Recipe unsaved", Toast.LENGTH_SHORT).show();
-                    } else {
+                        holder.favoriteButton.clearColorFilter();
+                        }
+                    else {
                         holder.favoriteButton.setImageResource(R.drawable.bookmark_saved); // Set to saved icon
                         holder.favoriteButton.setTag("saved");
-                        Toast.makeText(context, "Recipe saved", Toast.LENGTH_SHORT).show();
+                        holder.favoriteButton.setColorFilter(context.getResources().getColor(R.color.green));
                     }
                 }
 

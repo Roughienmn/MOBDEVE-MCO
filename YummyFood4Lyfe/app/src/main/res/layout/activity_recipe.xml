@@ -265,22 +265,6 @@
     </RelativeLayout>
 
     <ImageView
-        android:id="@+id/bookmark_image"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/bookmark_btn_with_circle"
-        android:clickable="true"
-        android:contentDescription="Bookmark"
-        android:foregroundGravity="center"
-        android:hapticFeedbackEnabled="true"
-        android:padding="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/white" />
-
-    <ImageView
         android:id="@+id/scroll"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -291,5 +275,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/relativeLayout"
         tools:ignore="SpeakableTextPresentCheck" />
+
+    <ImageButton
+        android:id="@+id/favoriteButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:padding="7dp"
+        android:background="@drawable/circle_background"
+        android:contentDescription="Bookmark"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@id/recommended_img"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.122"
+        app:srcCompat="@drawable/bookmark_notsaved" />
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

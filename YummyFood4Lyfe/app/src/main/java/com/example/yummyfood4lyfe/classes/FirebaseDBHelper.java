@@ -7,6 +7,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FirebaseDBHelper {
     FirebaseDatabase database;
     DatabaseReference userRef, recipeRef, reviewRef, savedRef;
@@ -115,6 +118,8 @@ public class FirebaseDBHelper {
         return recipeRef.orderByChild("timestamp").limitToLast(limit);
     }
 
+
+
     public void insertReview(Review review, OnDBOperationListener<Void> listener) {
         String reviewId = reviewRef.push().getKey();
         review.setReviewid(reviewId);
@@ -174,6 +179,30 @@ public class FirebaseDBHelper {
     public DatabaseReference getSavedRecipesRef(String userId) {
         return savedRef.child(userId);
     }
+
+    public void getSavedRecipeIds(String userId, OnDBOperationListener<List<String>> listener) {
+        savedRef.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<String> savedRecipeIds = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    savedRecipeIds.add(snapshot.getKey());
+                }
+                listener.onSuccess(savedRecipeIds);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                listener.onFailure(databaseError.toException());
+            }
+        });
+    }
+
+    public Query getRecipeById(String recipeId) {
+        return recipeRef.child(recipeId);
+    }
+
+
 
     public interface OnDBOperationListener<T>{
         void onSuccess(T result);
