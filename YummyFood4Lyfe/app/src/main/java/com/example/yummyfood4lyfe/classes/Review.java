@@ -4,17 +4,17 @@ import java.util.Date;
 
 public class Review {
 
-    private int reviewid;
-    private int recipeid;
+    private String reviewid;
+    private String recipeid;
 
-    private int userId;
+    private String userId;
     private String reviewText;
     private Date dateCreated;
 
     public Review(){
     }
 
-    public Review(int reviewid, int recipeid, int userId, String reviewText){
+    public Review(String reviewid, String recipeid, String userId, String reviewText){
         this.reviewid = reviewid;
         this.recipeid = recipeid;
         this.userId = userId;
@@ -22,27 +22,27 @@ public class Review {
         this.dateCreated = new Date();
     }
 
-    public int getReviewid() {
+    public String getReviewid() {
         return reviewid;
     }
 
-    public void setReviewid(int reviewid) {
+    public void setReviewid(String reviewid) {
         this.reviewid = reviewid;
     }
 
-    public int getRecipeid() {
+    public String getRecipeid() {
         return recipeid;
     }
 
-    public void setRecipeid(int recipeid) {
+    public void setRecipeid(String recipeid) {
         this.recipeid = recipeid;
     }
 
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

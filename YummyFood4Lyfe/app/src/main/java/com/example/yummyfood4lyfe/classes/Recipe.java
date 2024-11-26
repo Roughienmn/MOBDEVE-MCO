@@ -2,7 +2,7 @@ package com.example.yummyfood4lyfe.classes;
 
 public class Recipe {
 
-    private int recipeid;
+    private String recipeid;
     private String username;
     private String title;
     private String cookingTime;
@@ -28,7 +28,7 @@ public class Recipe {
     }
 
     // constructor for getting recipe from database
-    public Recipe(int recipeid, String username, String title, String cookingTime, int servings, int recipeImage, String ingredients, String instructions) {
+    public Recipe(String recipeid, String username, String title, String cookingTime, int servings, int recipeImage, String ingredients, String instructions) {
         this.recipeid = recipeid;
         this.username = username;
         this.title = title;
@@ -39,11 +39,11 @@ public class Recipe {
         this.instructions = instructions;
     }
 
-    public int getRecipeid() {
+    public String getRecipeid() {
         return recipeid;
     }
 
-    public void setRecipeid(int recipeid) {
+    public void setRecipeid(String recipeid) {
         this.recipeid = recipeid;
     }
 

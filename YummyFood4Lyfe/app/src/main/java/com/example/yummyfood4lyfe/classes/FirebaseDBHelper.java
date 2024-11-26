@@ -28,7 +28,10 @@ public class FirebaseDBHelper {
                 if (exists != null) {
                     listener.onFailure(new Exception(exists + " already exists"));
                 } else {
-                    userRef.push().setValue(user)
+                    String userId = userRef.push().getKey();
+                    user.setUserid(userId);
+
+                    userRef.child(userId).setValue(user)
                             .addOnSuccessListener(aVoid -> listener.onSuccess(null))
                             .addOnFailureListener(listener::onFailure);
                 }
@@ -100,7 +103,12 @@ public class FirebaseDBHelper {
     }
 
     public void insertRecipe(Recipe recipe, OnDBOperationListener<Void> listener) {
-        recipeRef.push().setValue(recipe)
+        // Generate a new unique key for the recipe
+        String recipeId = recipeRef.push().getKey();
+        // Set the generated key as the recipeid for the new recipe
+        recipe.setRecipeid(recipeId);
+        // Save the new recipe to the database using the generated key
+        recipeRef.child(recipeId).setValue(recipe)
                 .addOnSuccessListener(aVoid -> listener.onSuccess(null))
                 .addOnFailureListener(listener::onFailure);
     }
