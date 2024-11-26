@@ -73,8 +73,6 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
             reviewDate = itemView.findViewById(R.id.reviewDate);
             reviewText = itemView.findViewById(R.id.reviewText);
             reviewerImage = itemView.findViewById(R.id.reviewerImage);
-            reviewImage1 = itemView.findViewById(R.id.reviewImage1);
-            reviewImage2 = itemView.findViewById(R.id.reviewImage2);
             reviewCard = itemView.findViewById(R.id.reviewCard);
         }
     }
