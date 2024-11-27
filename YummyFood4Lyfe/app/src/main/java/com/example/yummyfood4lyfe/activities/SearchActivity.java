@@ -10,6 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,17 +24,28 @@ import android.widget.ImageView;
 
 import com.example.yummyfood4lyfe.R;
 import com.example.yummyfood4lyfe.RecommendedListAdapter;
+import com.example.yummyfood4lyfe.classes.Recipe;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class SearchActivity extends AppCompatActivity {
 
     EditText search;
+    ImageView searchButton;
     ImageView back_btn;
     RecyclerView rcview;
+    RecommendedListAdapter adapter;
+    List<Recipe> recipeList = new ArrayList<>();
     //List<User> dataPopular = new ArrayList<>();
-   // SearchAdapter adapter;
+    // SearchAdapter adapter;
     //List<User> recipes;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -43,54 +57,33 @@ public class SearchActivity extends AppCompatActivity {
         // Find views
         search = findViewById(R.id.search);
         rcview = findViewById(R.id.rcview);
-
-        // Show and focus the keyboard
-        search.requestFocus();
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-
-        rcview.setLayoutManager(new LinearLayoutManager(this));
-
-        //List<String> dataList = Arrays.asList("Classic Chicken Adobo", "Another Recipe", "More Recipes"); //TODO ADD MORE
-        //RecommendedListAdapter adapter = new RecommendedListAdapter(this, dataList);
-        //rcview.setAdapter(adapter);
-
-     // Get database
-
-      /* this is for backend, I just added here
-        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                        AppDatabase.class, "db_name").allowMainThreadQueries()
-                .createFromAsset("database/recipe.db")
-                .build();
-        UserDao userDao = db.userDao();
-
-        // Get all recipes from database
-        recipes = userDao.getAll();
-
-        // Filter the Popular category on activity start
-        for (User recipe : recipes) {
-            if (recipe.getCategory().contains("Popular")) {
-                dataPopular.add(recipe);
-            }
-        }
+        searchButton = findViewById(R.id.search_button);
 
         // Set layout manager to recyclerView
         rcview.setLayoutManager(new LinearLayoutManager(this));
 
-        // Hide keyboard when recyclerView item clicked
-        rcview.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
-                return false;
-            }
-        });
-        */
-/* THIS IS FOR THE BACKEND, I JUST ADDED HERE
-        // Set adapter to search recyclerView
-        adapter = new SearchAdapter(dataPopular, getApplicationContext());
+        // Initialize the adapter with an empty list
+        adapter = new RecommendedListAdapter(this, recipeList, false);
         rcview.setAdapter(adapter);
 
-        // Search from all recipes when Edittext data changed
+        // Show and focus the keyboard
+        search.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.showSoftInput(search, InputMethodManager.SHOW_IMPLICIT);
+        }
+
+        // Retrieve the search query from the intent
+        String searchQuery = getIntent().getStringExtra("search_query");
+        if (searchQuery != null && !searchQuery.isEmpty()) {
+            search.setText(searchQuery);
+            filter(searchQuery);
+        }
+
+        // Set OnClickListener to handle search button press
+        searchButton.setOnClickListener(v -> filter(search.getText().toString()));
+
+        // Search from all recipes when EditText data changed
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -109,23 +102,42 @@ public class SearchActivity extends AppCompatActivity {
                 }
             }
         });
-          */
     }
 
-    /*private void filter(String string) {
-    }
+    private void filter(String text) {
+        String[] searchWords = text.toLowerCase(Locale.ROOT).split("\\s+");
+        Query query = FirebaseDatabase.getInstance().getReference("recipes")
+                .orderByChild("title");
 
-    /* THIS IS FOR THE BACKEND, I JUST ADDED HERE
-    // Filter the searched item from all recipes
-    public void filter(String text) {
-        List<User> filterList = new ArrayList<>();
-
-        for (User recipe : recipes) { // Loop for check searched item in recipe list
-            if (recipe.getTitle().toLowerCase(Locale.ROOT).contains(text.toLowerCase(Locale.ROOT))) {
-                filterList.add(recipe);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                recipeList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Recipe recipe = snapshot.getValue(Recipe.class);
+                    if (recipe != null) {
+                        String title = recipe.getTitle().toLowerCase(Locale.ROOT);
+                        boolean matches = true;
+                        for (String word : searchWords) {
+                            if (!title.contains(word)) {
+                                matches = false;
+                                break;
+                            }
+                        }
+                        if (matches) {
+                            recipeList.add(recipe);
+                        }
+                    }
+                }
+                adapter.notifyDataSetChanged();
             }
-        }
 
-        // Update search recyclerView with new item
-        adapter.filterList(filterList); */
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle the error
+            }
+        });
     }
+}
+
+

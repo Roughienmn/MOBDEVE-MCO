@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,14 +23,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 public class HomePageActivity extends AppCompatActivity {
     FirebaseDBHelper firebaseDB;
-    List <Recipe> recipeList = new ArrayList<>();
+    List<Recipe> recipeList = new ArrayList<>();
     TextView userGreeting, noEntryText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         firebaseDB = new FirebaseDBHelper();
@@ -38,8 +40,12 @@ public class HomePageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
 
-
         noEntryText = findViewById(R.id.noEntryText);
+
+        EditText searchBar = findViewById(R.id.search);
+        ImageView searchButton = findViewById(R.id.search_button);
+
+        searchButton.setOnClickListener(v -> navigateToSearchActivity());
 
         RecyclerView recyclerView = findViewById(R.id.rcview_recommended);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -105,6 +111,14 @@ public class HomePageActivity extends AppCompatActivity {
             }
             return false;
         });
+    }
+
+    public void navigateToSearchActivity() {
+        EditText searchBar = findViewById(R.id.search);
+        String searchText = searchBar.getText().toString();
+        Intent intent = new Intent(HomePageActivity.this, SearchActivity.class);
+        intent.putExtra("search_query", searchText);
+        startActivity(intent);
     }
 
     @Override

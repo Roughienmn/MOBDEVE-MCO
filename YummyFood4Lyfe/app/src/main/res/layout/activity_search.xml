@@ -6,6 +6,53 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="20dp">
+
+        <EditText
+            android:id="@+id/search"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/poppins"
+            android:hint="Search for a recipe"
+            android:inputType="textFilter"
+            android:paddingStart="20dp"
+            android:textColorHint="#5A5858"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:id="@+id/search_button"
+            android:layout_width="wrap_content"
+            android:layout_height="55dp"
+            android:src="@drawable/magnifyingglass_search"
+            android:onClick="search"
+            android:contentDescription="Search" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search" />
+
+</LinearLayout>
+
+<!-- old design
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <EditText
         android:id="@+id/search"
         android:layout_width="match_parent"
@@ -36,3 +83,5 @@
         app:layout_constraintTop_toBottomOf="@+id/search" />
 
 </LinearLayout>
+
+old design -->
