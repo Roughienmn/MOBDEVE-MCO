@@ -59,7 +59,7 @@ public class OtherProfileActivity extends AppCompatActivity {
             return insets;
         });
 
-        firebaseDB = new FirebaseDBHelper();
+        firebaseDB = new FirebaseDBHelper(getApplicationContext());
 
         Intent i = getIntent();
         String username = i.getStringExtra("username");

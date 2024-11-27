@@ -45,7 +45,7 @@ public class CommentActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_comment);
 
-        firebaseDB = new FirebaseDBHelper();
+        firebaseDB = new FirebaseDBHelper(getApplicationContext());
         commentRecyclerView = findViewById(R.id.commentRecyclerView);
         commentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         commentListAdapter = new CommentListAdapter(commentList, this, false);

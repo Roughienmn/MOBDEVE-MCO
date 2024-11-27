@@ -32,7 +32,7 @@ public class RecommendedListAdapter extends RecyclerView.Adapter<RecommendedList
 
     private List<Recipe> recipeList;
     private Context context;
-    private FirebaseDBHelper firebaseDB = new FirebaseDBHelper();
+    private FirebaseDBHelper firebaseDB;
     private SharedPreferences sharedPreferences;
     private String userid;
     private Boolean ownProfile;
@@ -43,6 +43,7 @@ public class RecommendedListAdapter extends RecyclerView.Adapter<RecommendedList
         this.sharedPreferences = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE);
         this.userid = sharedPreferences.getString("userid", null);
         this.ownProfile = ownProfile;
+        firebaseDB = new FirebaseDBHelper(context);
     }
 
     @NonNull

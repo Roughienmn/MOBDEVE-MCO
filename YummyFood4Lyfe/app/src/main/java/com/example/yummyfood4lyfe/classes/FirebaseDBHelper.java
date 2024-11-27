@@ -1,5 +1,7 @@
 package com.example.yummyfood4lyfe.classes;
 
+import android.content.Context;
+
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.DataSnapshot;
@@ -15,13 +17,15 @@ import java.util.Map;
 public class FirebaseDBHelper {
     FirebaseDatabase database;
     DatabaseReference userRef, recipeRef, reviewRef, savedRef;
+    DatabaseHelper localdb;
 
-    public FirebaseDBHelper(){
+    public FirebaseDBHelper(Context context){
         database = FirebaseDatabase.getInstance();
         userRef = database.getReference(MyFirestoreReferences.USERS_COLLECTION);
         recipeRef = database.getReference(MyFirestoreReferences.RECIPES_COLLECTION);
         reviewRef = database.getReference(MyFirestoreReferences.REVIEWS_COLLECTION);
         savedRef = database.getReference(MyFirestoreReferences.SAVED_COLLECTION);
+        localdb = new DatabaseHelper(context);
     }
 
     public void insertUser(User user, OnDBOperationListener<String> listener) {
@@ -168,10 +172,46 @@ public class FirebaseDBHelper {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     // Recipe is already saved, remove it
-                    removeSavedRecipe(userId, recipeId, listener);
+                    removeSavedRecipe(userId, recipeId, new OnDBOperationListener<Void>() {
+                        @Override
+                        public void onSuccess(Void result) {
+                            localdb.deleteRecipe(recipeId);
+                            listener.onSuccess(result);
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            listener.onFailure(e);
+                        }
+                    });
                 } else {
                     // Recipe is not saved, add it
-                    insertSavedRecipe(userId, recipeId, listener);
+                    insertSavedRecipe(userId, recipeId, new OnDBOperationListener<Void>() {
+                        @Override
+                        public void onSuccess(Void result) {
+                            // Assuming you have a method to get the Recipe object by its ID
+                            getRecipeById(recipeId).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Recipe recipe = dataSnapshot.getValue(Recipe.class);
+                                    if (recipe != null) {
+                                        localdb.storeRecipe(recipe);
+                                    }
+                                    listener.onSuccess(result);
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    listener.onFailure(databaseError.toException());
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            listener.onFailure(e);
+                        }
+                    });
                 }
             }
 

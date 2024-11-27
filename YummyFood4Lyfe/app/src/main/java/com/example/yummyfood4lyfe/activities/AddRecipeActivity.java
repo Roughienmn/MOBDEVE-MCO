@@ -43,7 +43,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        firebaseDB = new FirebaseDBHelper();
+        firebaseDB = new FirebaseDBHelper(getApplicationContext());
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);

@@ -61,7 +61,7 @@ public class EditProfileActivity extends AppCompatActivity {
             return insets;
         });
 
-        firebaseDB = new FirebaseDBHelper();
+        firebaseDB = new FirebaseDBHelper(getApplicationContext());
 
         profileImageEditor = findViewById(R.id.profileImageEditor);
         saveChangesButton = findViewById(R.id.saveChangesButton);

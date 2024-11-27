@@ -33,7 +33,7 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        firebaseDB = new FirebaseDBHelper();
+        firebaseDB = new FirebaseDBHelper(getApplicationContext());
 
         signUpButton = findViewById(R.id.signUpButton);
         username = findViewById(R.id.username);

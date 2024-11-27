@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.yummyfood4lyfe.R;
 import com.example.yummyfood4lyfe.RecommendedListAdapter;
+import com.example.yummyfood4lyfe.classes.DatabaseHelper;
 import com.example.yummyfood4lyfe.classes.FirebaseDBHelper;
 import com.example.yummyfood4lyfe.classes.Recipe;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -39,7 +40,7 @@ public class SavedRecipeActivity extends AppCompatActivity {
 
         noEntryText = findViewById(R.id.noEntryText);
 
-        firebaseDB = new FirebaseDBHelper();
+        firebaseDB = new FirebaseDBHelper(getApplicationContext());
         SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
         String userid = sharedPreferences.getString("userid", null);
 
@@ -52,7 +53,7 @@ public class SavedRecipeActivity extends AppCompatActivity {
         adapter = new RecommendedListAdapter(this, recipeList, false);
         recyclerViewSavedRecipes.setAdapter(adapter);
         if (userid != null) {
-            firebaseDB.getSavedRecipeIds(userid, new FirebaseDBHelper.OnDBOperationListener<List<String>>() {
+            /*firebaseDB.getSavedRecipeIds(userid, new FirebaseDBHelper.OnDBOperationListener<List<String>>() {
                 @Override
                 public void onSuccess(List<String> result) {
                     savedRecipeIds = result;
@@ -86,9 +87,17 @@ public class SavedRecipeActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Exception e) {
-
-                }
+             */
+                    DatabaseHelper localdb = new DatabaseHelper(getApplicationContext());
+                    savedRecipeIds = localdb.getSavedRecipeIds();
+                    for (String recipeId: savedRecipeIds) {
+                        Recipe recipe = localdb.getRecipeById(recipeId);
+                        recipeList.add(recipe);
+                        adapter.notifyDataSetChanged();
+                    }
+                /*}
             });
+            */
         }
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);

@@ -2,14 +2,20 @@ package com.example.yummyfood4lyfe.classes;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "yummyfood4lyfe.db";
+    private Context context;
 
+    /*
     private static final String USERS_TABLE = "users";
     private static final String[] USERS_COLUMNS = {
             "id INTEGER PRIMARY KEY AUTOINCREMENT",
@@ -21,19 +27,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "bio TEXT",
             "name TEXT"
     };
+    */
 
     private static final String RECIPES_TABLE = "recipes";
     private static final String[] RECIPES_COLUMNS = {
             "id INTEGER PRIMARY KEY AUTOINCREMENT",
-            "user_id INTEGER",
+            "recipeid TEXT UNIQUE",
+            "username TEXT",
             "title TEXT",
-            "time TEXT",
-            "recipe_image INTEGER",
+            "cookingTime TEXT",
+            "servings INTEGER",
+            "recipe_image TEXT",
             "ingredients TEXT",
             "instructions TEXT",
-            "FOREIGN KEY (user_id) REFERENCES users(id)"
+            "timestamp LONG"
     };
 
+    private static final String SAVED_RECIPES_TABLE = "saved";
+    private static final String[] SAVED_RECIPES_COLUMNS = {
+            "recipeid TEXT",
+            "userid TEXT",
+            "PRIMARY KEY (recipeid, userid)"
+    };
+
+    /*
     private static final String REVIEWS_TABLE = "reviews";
     private static final String[] REVIEWS_COLUMNS = {
             "id INTEGER PRIMARY KEY AUTOINCREMENT",
@@ -43,17 +60,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "FOREIGN KEY (recipe_id) REFERENCES recipes(id)",
             "FOREIGN KEY (user_id) REFERENCES users(id)"
     };
-
+    */
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
+        this.context = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        createTable(db, USERS_TABLE, USERS_COLUMNS);
+        //createTable(db, USERS_TABLE, USERS_COLUMNS);
         createTable(db, RECIPES_TABLE, RECIPES_COLUMNS);
-        createTable(db, REVIEWS_TABLE, REVIEWS_COLUMNS);
+        //createTable(db, REVIEWS_TABLE, REVIEWS_COLUMNS);
+        createTable(db, SAVED_RECIPES_TABLE, SAVED_RECIPES_COLUMNS);
     }
 
     private void createTable(SQLiteDatabase db, String tableName, String[] columns) {
@@ -70,12 +89,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
-        db.execSQL("DROP TABLE IF EXISTS " + USERS_TABLE);
+        //db.execSQL("DROP TABLE IF EXISTS " + USERS_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + RECIPES_TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + REVIEWS_TABLE);
+        //db.execSQL("DROP TABLE IF EXISTS " + REVIEWS_TABLE);
         onCreate(db);
     }
-
+    /*
     public long insertUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -85,8 +104,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put("birthday", user.getBirthday());
 
         return db.insert(USERS_TABLE, null, contentValues);
-    }
+    }*/
 
+    /*
     public boolean searchExistingUsername(String username){
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM " + USERS_TABLE + " WHERE username = ?";
@@ -144,18 +164,86 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String[] selectionArgs = {username, password};
         return db.rawQuery(query, selectionArgs).getCount() > 0;
     }
+    */
 
-    public long insertRecipe(Recipe recipe) {
+    public long storeRecipe(Recipe recipe) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE);
+        String userid = sharedPreferences.getString("userid", null);
+        long savedTableResult = -1, recipeTableResult = -1;
+
+        //check if already stored
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + SAVED_RECIPES_TABLE + " WHERE recipeid = ? AND userid = ?";
+        String[] selectionArgs = {recipe.getRecipeid(), userid};
+        if (db.rawQuery(query, selectionArgs).getCount() <= 0) {
+            db = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("recipeid", recipe.getRecipeid());
+            contentValues.put("username", recipe.getUsername());
+            contentValues.put("title", recipe.getTitle());
+            contentValues.put("cookingTime", recipe.getCookingTime());
+            contentValues.put("servings", recipe.getServings());
+            contentValues.put("recipe_image", recipe.getRecipeImage());
+            contentValues.put("ingredients", recipe.getIngredients());
+            contentValues.put("instructions", recipe.getInstructions());
+            contentValues.put("timestamp", recipe.getTimestamp());
+
+            savedTableResult = db.insert(RECIPES_TABLE, null, contentValues);
+        }
+        ContentValues contentValues2 = new ContentValues();
+        contentValues2.put("recipeid", recipe.getRecipeid());
+        contentValues2.put("userid", userid);
+        recipeTableResult = db.insert(SAVED_RECIPES_TABLE, null, contentValues2);
+
+        return recipeTableResult;
+    }
+
+    public void deleteRecipe(String recipeid) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("username", recipe.getUsername());
-        contentValues.put("title", recipe.getTitle());
-        contentValues.put("time", recipe.getCookingTime());
-        contentValues.put("servings", recipe.getServings());
-        contentValues.put("recipe_image", recipe.getRecipeImage());
-        contentValues.put("ingredients", recipe.getIngredients());
-        contentValues.put("instructions", recipe.getInstructions());
+        SharedPreferences sharedPreferences = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE);
+        String userid = sharedPreferences.getString("userid", null);
+        db.delete(SAVED_RECIPES_TABLE, "recipeid = ? AND userid = ?", new String[]{recipeid, userid});
 
-        return db.insert(RECIPES_TABLE, null, contentValues);
+        //check if recipe is saved by any other user
+        Cursor cursor = db.rawQuery("SELECT * FROM " + SAVED_RECIPES_TABLE + " WHERE recipeid = ?", new String[]{recipeid});
+        if (cursor.getCount() == 0) {
+            db.delete(RECIPES_TABLE, "recipeid = ?", new String[]{recipeid});
+        }
+        db.delete(RECIPES_TABLE, "recipeid = ?", new String[]{recipeid});
+    }
+
+    public List<String> getSavedRecipeIds() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        SharedPreferences sharedPreferences = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE);
+        String userid = sharedPreferences.getString("userid", null);
+        Cursor cursor = db.rawQuery("SELECT recipeid FROM " + SAVED_RECIPES_TABLE + " WHERE userid = ?", new String[]{userid});
+
+        List<String> recipeIds = new ArrayList<>();
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                recipeIds.add(cursor.getString(cursor.getColumnIndexOrThrow("recipeid")));
+            }
+            cursor.close();
+        }
+        return recipeIds;
+    }
+
+    public Recipe getRecipeById(String recipeid) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + RECIPES_TABLE + " WHERE recipeid = ?", new String[]{recipeid});
+        if (cursor != null && cursor.moveToFirst()) {
+            String username = cursor.getString(cursor.getColumnIndexOrThrow("username"));
+            String title = cursor.getString(cursor.getColumnIndexOrThrow("title"));
+            String cookingTime = cursor.getString(cursor.getColumnIndexOrThrow("cookingTime"));
+            int servings = cursor.getInt(cursor.getColumnIndexOrThrow("servings"));
+            String recipeImage = cursor.getString(cursor.getColumnIndexOrThrow("recipe_image"));
+            String ingredients = cursor.getString(cursor.getColumnIndexOrThrow("ingredients"));
+            String instructions = cursor.getString(cursor.getColumnIndexOrThrow("instructions"));
+            long timestamp = cursor.getLong(cursor.getColumnIndexOrThrow("timestamp"));
+            cursor.close();
+            return new Recipe(recipeid, username, title, cookingTime, servings, recipeImage, ingredients, instructions, timestamp);
+        } else {
+            return null;
+        }
     }
 }

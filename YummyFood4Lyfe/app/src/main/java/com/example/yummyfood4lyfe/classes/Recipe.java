@@ -28,7 +28,7 @@ public class Recipe {
     }
 
     // constructor for getting recipe from database
-    public Recipe(String recipeid, String username, String title, String cookingTime, int servings, String recipeImage, String ingredients, String instructions) {
+    public Recipe(String recipeid, String username, String title, String cookingTime, int servings, String recipeImage, String ingredients, String instructions, long timestamp) {
         this.recipeid = recipeid;
         this.username = username;
         this.title = title;
@@ -37,6 +37,8 @@ public class Recipe {
         this.recipeImage = recipeImage;
         this.ingredients = ingredients;
         this.instructions = instructions;
+        this.timestamp = timestamp;
+
     }
 
     public String getRecipeid() {

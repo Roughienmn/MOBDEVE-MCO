@@ -43,7 +43,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
         this.reviewList = reviewList;
         this.context = context;
         this.clickable = clickable;
-        firebaseDB = new FirebaseDBHelper();
+        firebaseDB = new FirebaseDBHelper(context);
     }
 
     @NonNull

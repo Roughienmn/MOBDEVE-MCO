@@ -49,7 +49,7 @@ public class RecipeActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
         String userid = sharedPreferences.getString("userid", null);
 
-        firebaseDB = new FirebaseDBHelper();
+        firebaseDB = new FirebaseDBHelper(getApplicationContext());
 
         ingredientsScroll = findViewById(R.id.ingredients_scroll);
         stepsScroll = findViewById(R.id.instructions);

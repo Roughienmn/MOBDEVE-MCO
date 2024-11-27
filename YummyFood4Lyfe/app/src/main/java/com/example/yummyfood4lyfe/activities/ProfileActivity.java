@@ -60,7 +60,7 @@ public class ProfileActivity extends AppCompatActivity {
         String username = sharedPreferences.getString("username", null);
         String userid = sharedPreferences.getString("userid", null);
 
-        firebaseDB = new FirebaseDBHelper();
+        firebaseDB = new FirebaseDBHelper(getApplicationContext());
 
         profileUsername = findViewById(R.id.profileUsername);
         profileName = findViewById(R.id.profileName);
@@ -247,6 +247,11 @@ public class ProfileActivity extends AppCompatActivity {
     private void loadProfileData() {
         SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
         String username = sharedPreferences.getString("username", null);
+        profileName.setVisibility(View.GONE);
+        profileUsername.setText("@" + username);
+        profileUsername.setTextSize(20);
+        profileUsername.setTypeface(ResourcesCompat.getFont(ProfileActivity.this, R.font.poppins_semibold));
+        profileUsername.setTextColor(getResources().getColor(R.color.black));
 
         firebaseDB.getUserByUsername(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -262,11 +267,9 @@ public class ProfileActivity extends AppCompatActivity {
 
                             if(userName != null && !userName.isEmpty()) {
                                 profileName.setText(userName);
-                            } else {
-                                profileName.setVisibility(View.GONE);
-                                profileUsername.setTextSize(20);
-                                profileUsername.setTypeface(ResourcesCompat.getFont(ProfileActivity.this, R.font.poppins_semibold));
-                                profileUsername.setTextColor(getResources().getColor(R.color.black));
+                                profileName.setVisibility(View.VISIBLE);
+                                profileUsername.setTextSize(14);
+                                profileUsername.setTextColor(getResources().getColor(R.color.lightgrey));
                             }
 
                             if(userBio != null && !userBio.isEmpty()) {
