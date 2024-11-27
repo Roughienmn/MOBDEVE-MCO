@@ -39,7 +39,6 @@ import java.util.Locale;
 public class SearchActivity extends AppCompatActivity {
 
     EditText search;
-    ImageView searchButton;
     ImageView back_btn;
     RecyclerView rcview;
     RecommendedListAdapter adapter;
@@ -57,7 +56,6 @@ public class SearchActivity extends AppCompatActivity {
         // Find views
         search = findViewById(R.id.search);
         rcview = findViewById(R.id.rcview);
-        searchButton = findViewById(R.id.search_button);
 
         // Set layout manager to recyclerView
         rcview.setLayoutManager(new LinearLayoutManager(this));
@@ -79,9 +77,6 @@ public class SearchActivity extends AppCompatActivity {
             search.setText(searchQuery);
             filter(searchQuery);
         }
-
-        // Set OnClickListener to handle search button press
-        searchButton.setOnClickListener(v -> filter(search.getText().toString()));
 
         // Search from all recipes when EditText data changed
         search.addTextChangedListener(new TextWatcher() {

@@ -18,20 +18,16 @@
             android:layout_width="0dp"
             android:layout_height="55dp"
             android:layout_weight="1"
+            android:background="@drawable/edittext_background_white"
+            android:drawableStart="@drawable/magnifyingglass_search"
+            android:drawablePadding="10dp"
             android:fontFamily="@font/poppins"
             android:hint="Search for a recipe"
             android:inputType="textFilter"
             android:paddingStart="20dp"
-            android:textColorHint="#5A5858"
-            android:textSize="17sp" />
-
-        <ImageView
-            android:id="@+id/search_button"
-            android:layout_width="wrap_content"
-            android:layout_height="55dp"
-            android:src="@drawable/magnifyingglass_search"
-            android:onClick="search"
-            android:contentDescription="Search" />
+            android:textColorHint="@color/lightgrey"
+            android:textSize="17sp"
+            tools:ignore="RtlSymmetry"/>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

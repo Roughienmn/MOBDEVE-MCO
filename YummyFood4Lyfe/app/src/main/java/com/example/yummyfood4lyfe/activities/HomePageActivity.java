@@ -8,7 +8,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.view.inputmethod.EditorInfo;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,6 +30,7 @@ public class HomePageActivity extends AppCompatActivity {
     FirebaseDBHelper firebaseDB;
     List<Recipe> recipeList = new ArrayList<>();
     TextView userGreeting, noEntryText;
+    boolean isNavigating = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,14 @@ public class HomePageActivity extends AppCompatActivity {
         EditText searchBar = findViewById(R.id.search);
         ImageView searchButton = findViewById(R.id.search_button);
 
+        searchBar.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                navigateToSearchActivity();
+                return true;
+            }
+            return false;
+        });
+
         searchButton.setOnClickListener(v -> navigateToSearchActivity());
 
         RecyclerView recyclerView = findViewById(R.id.rcview_recommended);
@@ -52,6 +61,8 @@ public class HomePageActivity extends AppCompatActivity {
 
         RecommendedListAdapter adapter = new RecommendedListAdapter(this, recipeList, false);
         recyclerView.setAdapter(adapter);
+
+
 
         firebaseDB.getLatestRecipes(20).addValueEventListener(new ValueEventListener() {
             @Override
@@ -114,11 +125,17 @@ public class HomePageActivity extends AppCompatActivity {
     }
 
     public void navigateToSearchActivity() {
+        if (isNavigating) return; // Prevent duplicate calls
+        isNavigating = true;
+
         EditText searchBar = findViewById(R.id.search);
         String searchText = searchBar.getText().toString();
         Intent intent = new Intent(HomePageActivity.this, SearchActivity.class);
         intent.putExtra("search_query", searchText);
         startActivity(intent);
+
+        // Reset the flag after a small delay
+        searchBar.postDelayed(() -> isNavigating = false, 500);
     }
 
     @Override
